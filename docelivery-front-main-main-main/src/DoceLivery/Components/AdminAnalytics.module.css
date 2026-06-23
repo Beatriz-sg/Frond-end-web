@@ -1,0 +1,372 @@
+.analyticsContainer {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.analyticsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.analyticsHeader h2 {
+  color: #8a2be2;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.periodSelect {
+  padding: 0.75rem 1rem;
+  border: 2px solid rgba(138, 43, 226, 0.2);
+  border-radius: 8px;
+  background: white;
+  color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.periodSelect:focus {
+  border-color: #8a2be2;
+  box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.1);
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metricCard {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(138, 43, 226, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.metricCard:hover {
+  border-color: rgba(138, 43, 226, 0.3);
+  transform: translateY(-2px);
+}
+
+.metricIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.metricContent h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 0.25rem 0;
+}
+
+.metricContent p {
+  color: #666;
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.metricChange {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4CAF50;
+}
+
+.issuesSection {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(138, 43, 226, 0.1);
+  margin-bottom: 2rem;
+}
+
+.issuesSection h3 {
+  color: #8a2be2;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+}
+
+.issuesList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.issueItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(138, 43, 226, 0.05);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.issueItem:hover {
+  background: rgba(138, 43, 226, 0.1);
+}
+
+.issueInfo {
+  flex: 1;
+}
+
+.issueName {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.issueCount {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.issueMetrics {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.severity {
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.severity.high {
+  background: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+}
+
+.severity.medium {
+  background: rgba(255, 152, 0, 0.1);
+  color: #FF9800;
+}
+
+.severity.low {
+  background: rgba(76, 175, 80, 0.1);
+  color: #4CAF50;
+}
+
+.trend {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.trend.up {
+  color: #f44336;
+}
+
+.trend.down {
+  color: #4CAF50;
+}
+
+.trend.stable {
+  color: #666;
+}
+
+.agentSection {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(138, 43, 226, 0.1);
+  margin-bottom: 2rem;
+}
+
+.agentSection h3 {
+  color: #8a2be2;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+}
+
+.agentGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.agentCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(138, 43, 226, 0.05);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.agentCard:hover {
+  background: rgba(138, 43, 226, 0.1);
+}
+
+.agentAvatar {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #ff69b4 0%, #8a2be2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.agentInfo {
+  flex: 1;
+}
+
+.agentInfo h4 {
+  margin: 0 0 0.75rem 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.agentStats {
+  display: flex;
+  gap: 1rem;
+}
+
+.agentStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.statValue {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #8a2be2;
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.chartSection {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(138, 43, 226, 0.1);
+  margin-bottom: 2rem;
+}
+
+.chartSection h3 {
+  color: #8a2be2;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+}
+
+.chartContainer {
+  display: flex;
+  align-items: end;
+  gap: 1rem;
+  height: 200px;
+  padding: 1rem 0;
+}
+
+.chartBar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+.bar {
+  width: 100%;
+  background: linear-gradient(135deg, #ff69b4 0%, #8a2be2 100%);
+  border-radius: 4px 4px 0 0;
+  transition: all 0.3s ease;
+  margin-bottom: 0.5rem;
+}
+
+.bar:hover {
+  background: linear-gradient(135deg, #ff1493 0%, #6a1ebf 100%);
+}
+
+.barLabel {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.barValue {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #8a2be2;
+}
+
+.satisfactionSummary {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(138, 43, 226, 0.1);
+}
+
+.satisfactionSummary h3 {
+  color: #8a2be2;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+}
+
+.satisfactionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.satisfactionItem {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(138, 43, 226, 0.05);
+  border-radius: 8px;
+}
+
+.satisfactionScore {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #8a2be2;
+  margin-bottom: 0.5rem;
+}
+
+.satisfactionLabel {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.satisfactionStars {
+  color: #FFD700;
+  font-size: 1.2rem;
+}

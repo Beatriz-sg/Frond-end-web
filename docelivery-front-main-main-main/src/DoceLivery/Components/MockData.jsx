@@ -1,0 +1,278 @@
+// Exemplo de dados simulados (Mock Data)
+
+export const Mock_Data = {
+  // Dados de Usuário (opcional, para simular login)
+user: {
+    id: 1,
+    name: "Carlos Teste",
+    email: "carlos@doceli.com",
+},
+
+    // ----------------------------------------------------
+    // 1. LOJAS (Stores)
+    // Usamos 'logoKey' que deve ser mapeada em imageImports.js
+    // ----------------------------------------------------
+    stores: [
+        { id: 1,  name: "Doce Mimi",              rating: 4.9, deliveryTime: "15 - 25 min", fee: "R$ 4,00",  logoKey: "doce_mimi",           featured: true,  description: "Doces artesanais com muito carinho.",          lat: -23.5505, lng: -46.6333 },
+        { id: 2,  name: "Doce Paladar",            rating: 4.8, deliveryTime: "20 - 30 min", fee: "Grátis",   logoKey: "doce_paladar",        featured: true,  description: "Sabores únicos para seu paladar.",            lat: -23.5600, lng: -46.6500 },
+        { id: 3,  name: "Doce Sabor",              rating: 4.7, deliveryTime: "25 - 35 min", fee: "R$ 5,00",  logoKey: "doce_sabor",          featured: true,  description: "O melhor sabor em cada doce.",               lat: -23.5450, lng: -46.6200 },
+        { id: 4,  name: "Doce Sonho",              rating: 4.8, deliveryTime: "10 - 20 min", fee: "R$ 5,00",  logoKey: "doce_sonho",          featured: false, description: "Realizando sonhos doces.",                   lat: -23.5700, lng: -46.6400 },
+        { id: 5,  name: "Fábrica dos Doces",       rating: 4.9, deliveryTime: "15 - 25 min", fee: "Grátis",   logoKey: "fabrica_dos_doces",   featured: false, description: "Produção artesanal de doces especiais.",      lat: -23.5480, lng: -46.6450 },
+        { id: 6,  name: "Maier Confeitaria",       rating: 4.7, deliveryTime: "30 - 35 min", fee: "R$ 7,50", logoKey: "maier_confeitaria",   featured: false, description: "Tradição em confeitaria fina.",              lat: -23.5550, lng: -46.6600 },
+        { id: 7,  name: "Olivia Confeitaria",      rating: 4.8, deliveryTime: "25 - 40 min", fee: "Grátis",   logoKey: "olivia_confeitaria",  featured: false, description: "Doces elegantes e sofisticados.",            lat: -23.5620, lng: -46.6350 },
+        { id: 8,  name: "Só Delícia",              rating: 4.6, deliveryTime: "20 - 30 min", fee: "R$ 3,00",  logoKey: "so_delicia",          featured: false, description: "Pura delícia em cada mordida.",              lat: -23.5530, lng: -46.6280 },
+        { id: 9,  name: "Delícias da Ju",          rating: 4.5, deliveryTime: "35 - 45 min", fee: "R$ 6,00",  logoKey: "delicias_da_ju",      featured: false, description: "Doces caseiros da Ju.",                      lat: -23.5800, lng: -46.6550 },
+        { id: 10, name: "Doces da Maria",           rating: 4.4, deliveryTime: "30 - 40 min", fee: "R$ 4,50", logoKey: "doces_da_maria",      featured: false, description: "Receitas especiais da Maria.",               lat: -23.5420, lng: -46.6700 },
+        { id: 11, name: "Doces da Maria Premium",  rating: 4.7, deliveryTime: "20 - 30 min", fee: "Grátis",   logoKey: "doces_da_maria1",     featured: false, description: "Versão premium dos doces da Maria.",         lat: -23.5490, lng: -46.6150 },
+        { id: 12, name: "Doce Tentação",           rating: 4.6, deliveryTime: "25 - 35 min", fee: "R$ 3,50", logoKey: "doce_mimi",           featured: false, description: "Tentações doces irresistíveis.",             lat: -23.5660, lng: -46.6480 },
+        { id: 13, name: "Confeitaria Doce Vida",   rating: 4.5, deliveryTime: "30 - 40 min", fee: "R$ 5,50", logoKey: "doce_sabor",          featured: false, description: "Adoçando sua vida com sabor.",               lat: -23.5580, lng: -46.6220 },
+        { id: 14, name: "Doces & Cia",             rating: 4.4, deliveryTime: "35 - 45 min", fee: "R$ 4,00",  logoKey: "fabrica_dos_doces",   featured: false, description: "Companhia perfeita para momentos doces.",    lat: -23.5720, lng: -46.6380 },
+        { id: 15, name: "Confeitaria Doce Mel",    rating: 4.3, deliveryTime: "20 - 30 min", fee: "R$ 6,00",  logoKey: "olivia_confeitaria",  featured: false, description: "Doces com o sabor especial do mel.",         lat: -23.5510, lng: -46.6520 },
+        { id: 16, name: "Doce Magia",              rating: 4.2, deliveryTime: "25 - 35 min", fee: "Grátis",   logoKey: "maier_confeitaria",   featured: false, description: "A magia dos doces em cada mordida.",         lat: -23.5640, lng: -46.6300 },
+        { id: 17, name: "Confeitaria Doce Lar",    rating: 4.1, deliveryTime: "30 - 40 min", fee: "R$ 3,00",  logoKey: "so_delicia",          featured: false, description: "O carinho de casa em cada doce.",            lat: -23.5760, lng: -46.6430 },
+
+    ],
+
+    // ----------------------------------------------------
+    // 2. CATEGORIAS (Categories)
+    // Note que adicionamos 'categoryId' nos Offers para permitir o filtro.
+    // ----------------------------------------------------
+    categories: [
+        { id: 101, name: "Bolos", icon: "🎂" },
+        { id: 102, name: "Churros", icon: "🥨" },
+        { id: 103, name: "Cupcakes", icon: "🧁" },
+        { id: 104, name: "Tortas", icon: "🥧" },
+        { id: 106, name: "Brigadeiros", icon: "🍫" },
+        { id: 107, name: "Brownies", icon: "🍪" },
+        { id: 108, name: "Pães de Mel", icon: "🍯" },
+        { id: 109, name: "Salgados", icon: "🥟" },
+        { id: 110, name: "Bebidas", icon: "🥤" },
+        { id: 111, name: "Sobremesas", icon: "🍮" },
+    ],
+
+    // ----------------------------------------------------
+    // 3. OFERTAS (Offers)
+    // Usamos 'imageKey' que deve ser mapeada em imageImports.js
+    // ----------------------------------------------------
+    offers: [
+        {
+            id: 201,
+            name: "Bolo Especial Mimi",
+            store: "Doce Mimi",
+            price: 35.90,
+            imageKey: "bolo_vulcao",
+            categoryId: 101,
+            description: "Bolo de chocolate molhadinho da Mimi.",
+        },
+        {
+            id: 202,
+            name: "Torta do Paladar",
+            store: "Doce Paladar",
+            price: 12.50,
+            imageKey: "torta_limao",
+            categoryId: 104,
+            description: "Torta especial do Doce Paladar.",
+        },
+        {
+            id: 203,
+            name: "Cupcake Sabor",
+            store: "Doce Sabor",
+            price: 8.00,
+            imageKey: "cupcake_baunilha",
+            categoryId: 103,
+            description: "Cupcake com o melhor sabor.",
+        },
+        {
+            id: 204,
+            name: "Brownies dos Sonhos",
+            store: "Doce Sonho",
+            price: 25.00,
+            imageKey: "brownies",
+            categoryId: 101,
+            description: "Brownies que realizam sonhos.",
+        },
+        {
+            id: 205,
+            name: "Mousse de Chocolate",
+            store: "Doces da Maria",
+            price: 18.99,
+            imageKey: "mousse_chocolate", // Chave para IMAGE_MAP
+            categoryId: 104,
+            description: "Mousse de chocolate meio amargo aerada.",
+        },
+        {
+            id: 206,
+            name: "Churros de Doce de Leite",
+            store: "Churros do Zé",
+            price: 15.00,
+            imageKey: "churros", // Adicione esta chave ao seu IMAGE_MAP
+            categoryId: 102,
+            description: "Porção de churros com recheio de doce de leite.",
+        },
+        {
+            id: 207,
+            store: "Fábrica dos Doces",
+            name: "Brigadeiro Gourmet",
+            price: 3.50,
+            imageKey: "brigadeiro_gourmet",
+            categoryId: 106,
+            description: "Brigadeiro artesanal da fábrica.",
+        },
+        {
+            id: 208,
+            store: "Maier Confeitaria",
+            name: "Bolo Red Velvet",
+            price: 45.00,
+            imageKey: "red_velvet_cupcake",
+            categoryId: 101,
+            description: "Bolo red velvet tradicional da Maier.",
+        },
+        {
+            id: 210,
+            store: "Olivia Confeitaria",
+            name: "Torta de Morango",
+            price: 38.00,
+            imageKey: "torta_limao",
+            categoryId: 104,
+            description: "Torta elegante da Olivia.",
+        },
+        {
+            id: 211,
+            store: "Só Delícia",
+            name: "Cupcake Premium",
+            price: 12.00,
+            imageKey: "red_velvet_cupcake",
+            categoryId: 103,
+            description: "Cupcake delicioso e especial.",
+        },
+        {
+            id: 212,
+            store: "Doce Mimi",
+            name: "Bolo de Pote Tradicional",
+            price: 8.50,
+            imageKey: "bolo_de_pote",
+            categoryId: 101,
+            description: "Bolo de pote cremoso e irresistível.",
+        },
+        {
+            id: 213,
+            store: "Doce Paladar",
+            name: "Bolo de Pote Chocolate com Morango",
+            price: 9.50,
+            imageKey: "bolo_de_pote_chocolate_morango",
+            categoryId: 101,
+            description: "Combinação perfeita de chocolate e morango.",
+        },
+        {
+            id: 214,
+            store: "Doce Sabor",
+            name: "Bolo de Pote de Cenoura",
+            price: 8.00,
+            imageKey: "bolo_de_pote_cenoura",
+            categoryId: 101,
+            description: "Bolo de cenoura com cobertura especial.",
+        },
+        {
+            id: 215,
+            store: "Fábrica dos Doces",
+            name: "Brigadeiro Clássico",
+            price: 2.50,
+            imageKey: "brigadeiro",
+            categoryId: 106,
+            description: "Brigadeiro tradicional irresistível.",
+        },
+        {
+            id: 216,
+            store: "Maier Confeitaria",
+            name: "Brigadeiro Gourmet Mix",
+            price: 4.00,
+            imageKey: "brigadeiro_1",
+            categoryId: 106,
+            description: "Seleção especial de brigadeiros gourmet.",
+        },
+        {
+            id: 217,
+            store: "Olivia Confeitaria",
+            name: "Brigadeiro Premium",
+            price: 3.50,
+            imageKey: "brigadeiro_2",
+            categoryId: 106,
+            description: "Brigadeiro premium com ingredientes selecionados.",
+        },
+        {
+            id: 218,
+            store: "Só Delícia",
+            name: "Copo da Felicidade",
+            price: 15.00,
+            imageKey: "copo_da_felicidade",
+            categoryId: 104,
+            description: "Sobremesa em camadas que traz felicidade.",
+        },
+        {
+            id: 219,
+            store: "Doce Sonho",
+            name: "Cupcake de Chocolate",
+            price: 7.50,
+            imageKey: "cupcake_chocolate",
+            categoryId: 103,
+            description: "Cupcake de chocolate dos sonhos.",
+        },
+        {
+            id: 220,
+            store: "Delícias da Ju",
+            name: "Cupcake Doce de Leite",
+            price: 8.50,
+            imageKey: "cupcake_doce_de_leite",
+            categoryId: 103,
+            description: "Cupcake com recheio de doce de leite.",
+        },
+        {
+            id: 221,
+            store: "Doces da Maria",
+            name: "Doces Finos Sortidos",
+            price: 25.00,
+            imageKey: "doces_finos",
+            categoryId: 106,
+            description: "Seleção de doces finos artesanais.",
+        },
+        {
+            id: 222,
+            store: "Doce Mimi",
+            name: "Mousse de Chocolate Especial",
+            price: 12.00,
+            imageKey: "mousse_chocolate_easy",
+            categoryId: 104,
+            description: "Mousse de chocolate cremoso e especial.",
+        },
+        {
+            id: 223,
+            store: "Doce Paladar",
+            name: "Mousse de Morango",
+            price: 13.50,
+            imageKey: "mousse_morango",
+            categoryId: 104,
+            description: "Mousse refrescante de morango.",
+        },
+        {
+            id: 224,
+            store: "Fábrica dos Doces",
+            name: "Petit Gateau",
+            price: 18.00,
+            imageKey: "petgato",
+            categoryId: 101,
+            description: "Petit gateau com sorvete de baunilha.",
+        },
+        {
+            id: 225,
+            store: "Maier Confeitaria",
+            name: "Bolo Vulcão Premium",
+            price: 42.00,
+            imageKey: "bolo_vulcao",
+            categoryId: 101,
+            description: "Bolo vulcão premium da casa.",
+        },
+
+        
+    ],
+};
+export default Mock_Data;

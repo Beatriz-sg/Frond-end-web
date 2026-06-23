@@ -1,0 +1,64 @@
+.vendasContainer {
+    margin: 20px 0;
+    position: relative;
+}
+
+.notificacao {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #10B981;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.vendasGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.diaCard {
+    background: #f8f9fa;
+    padding: 12px 8px;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.diaCard.hoje {
+    background: #8B5CF6;
+    color: white;
+    border-color: #7C3AED;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.diaNome {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.diaValor {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+}

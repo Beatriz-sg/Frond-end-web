@@ -1,0 +1,112 @@
+.suporteContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.suporteHeader h2 {
+  margin: 0 0 10px 0;
+  color: #1f2937;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.suporteHeader p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.contatoCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.contatoCard {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.contatoCard h3 {
+  margin: 0 0 5px 0;
+  color: #1f2937;
+  font-size: 1.1rem;
+}
+
+.contatoCard p {
+  margin: 0 0 3px 0;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.contatoCard small {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.ticketCard {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.ticketCard h3 {
+  margin: 0 0 15px 0;
+  color: #1f2937;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.ticketForm textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  resize: vertical;
+  font-family: inherit;
+  margin-bottom: 15px;
+}
+
+.enviarBtn {
+  padding: 12px 24px;
+  border: none;
+  background: #10b981;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.enviarBtn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.ticketSucesso {
+  text-align: center;
+  padding: 20px;
+}
+
+.sucessoIcon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.ticketSucesso h4 {
+  margin: 0 0 10px 0;
+  color: #10b981;
+}
+
+@media (max-width: 768px) {
+  .contatoCards {
+    grid-template-columns: 1fr;
+  }
+}

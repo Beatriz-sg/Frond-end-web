@@ -1,0 +1,43 @@
+.lojas {
+  padding: 4rem 2rem;
+  background: #f8f9fa;
+}
+
+.lojas h2 {
+  text-align: center;
+  color: #8a2be2;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.lojasGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.lojaCard {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.lojaCard:hover {
+  transform: translateY(-5px);
+}
+
+.lojaCard h3 {
+  color: #ff69b4;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.lojaCard p {
+  color: #666;
+  line-height: 1.6;
+}

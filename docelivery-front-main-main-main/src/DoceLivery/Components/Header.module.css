@@ -1,0 +1,422 @@
+/* style do nav bar esse e a configuracao do header o famoso menu */
+
+header {
+    /* background-color: rgb(255, 153, 218); */
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    box-shadow: 0px 3px 10px #464646;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
+
+.nav_bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem 4rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo_img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.nav_list {
+    display: flex;
+    align-items: center;
+}
+
+.nav_list ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+
+.nav_item {
+    margin: 0 15px;
+
+}
+
+.nav_link {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.5rem;
+    padding: 0 20px;
+}
+
+.login_button button {
+    border: none;
+    border-radius: 50%;
+    padding: 20px 20px;
+    background-color: orchid;
+    box-shadow: 4px 5px 4px rgba(0, 0, 0, 0.25);
+    margin-top: 20px;
+}
+
+.login_button button a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.mobile_menu_icon {
+    display: none;
+}
+
+.mobile_menu {
+    display: none;
+}
+
+@media screen and (max-width: 730px) {
+.nav_bar {
+padding: 1.5rem 4rem;
+}
+
+    .nav_item {
+        display: none;
+    }
+
+    .login_button {
+        display: none;
+    }
+
+    .mobile_menu_icon {
+        display: block;
+    }
+
+    .mobile_menu_icon, button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .mobile_menu ul {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        padding-bottom: 1rem;
+    }
+
+    .mobile_menu .nav_item {
+        display: block;
+        padding-top: 1.2rem;
+    }
+
+    .mobile_menu .login_button {
+        display: block;
+        padding: 1rem 2rem;
+    }
+
+    .mobile_menu .login_button button {
+        width: 100%;
+    }
+
+    .open {
+        display: block;
+    }
+}
+
+/* Seção de Parceiros estilo iFood */
+.parceiros_section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 80px 0;
+    margin-top: 50px;
+}
+
+.parceiros_container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.parceiros_titulo {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ff69b4 0%, #8a2be2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 15px;
+}
+
+.parceiros_subtitulo {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 50px;
+    font-weight: 500;
+}
+
+.parceiros_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 50px;
+    margin-top: 50px;
+}
+
+.parceiro_card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    min-height: 600px;
+}
+
+.parceiro_card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #ff69b4 0%, #8a2be2 100%);
+}
+
+.parceiro_card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    border-color: rgba(138, 43, 226, 0.2);
+}
+
+.card_header {
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, #ff69b4 0%, #8a2be2 100%);
+}
+
+.card_images {
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.loja_img {
+    width: 120px;
+    height: 120px;
+    border-radius: 15px;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.loja_img:hover {
+    transform: scale(1.05);
+}
+
+.confeiteiro_hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+}
+
+.confeiteiro_main {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.entregador_hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px;
+}
+
+.entregadora_main {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card_content {
+    padding: 30px;
+}
+
+.parceiro_card h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.parceiro_card p {
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.beneficios {
+    list-style: none;
+    padding: 0;
+    margin: 25px 0;
+    text-align: left;
+}
+
+.beneficios li {
+    padding: 8px 0;
+    color: #495057;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.beneficios li::before {
+    content: '✓';
+    color: #28a745;
+    font-weight: bold;
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.testimonials {
+    margin: 20px 0;
+}
+
+.testimonial {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border-left: 4px solid #ff69b4;
+}
+
+.entregador_avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ff69b4;
+}
+
+.testimonial div {
+    flex: 1;
+}
+
+.testimonial strong {
+    display: block;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.testimonial span {
+    color: #ffc107;
+    font-size: 0.8rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.testimonial p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.cta_button {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff69b4 0%, #8a2be2 100%);
+    color: white;
+    text-decoration: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+}
+
+.cta_button:hover {
+    background: linear-gradient(135deg, #ff1493 0%, #6a1ebf 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .parceiros_grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .parceiro_card {
+        min-height: auto;
+    }
+    
+    .card_header {
+        height: 200px;
+    }
+    
+    .card_content {
+        padding: 25px 20px;
+    }
+    
+    .card_images {
+        padding: 15px;
+        gap: 8px;
+    }
+    
+    .loja_img {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .confeiteiro_main {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .entregadora_main {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .parceiros_titulo {
+        font-size: 2rem;
+    }
+    
+    .parceiros_subtitulo {
+        font-size: 1rem;
+    }
+    
+    .testimonial {
+        padding: 12px;
+        gap: 10px;
+    }
+    
+    .entregador_avatar {
+        width: 40px;
+        height: 40px;
+    }
+}

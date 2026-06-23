@@ -1,0 +1,91 @@
+.home {
+    display: flex;
+    min-height: calc(100vh - 36px);
+    position: relative;
+    border-radius: 50%;
+    
+}
+
+.texto {
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    gap: 28px;
+    margin-top: 5%;
+    padding: 1.5rem 6rem;
+}
+
+.titulo {
+    font-size: 4rem;
+    color: azure;
+}
+
+.titulo_span {
+    color: blueviolet;
+}
+
+.descricao {
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.login_button_1 button
+{
+    border: none;
+    border-radius: 50%;
+    padding: 20px 20px;
+    background-color: orchid;
+    box-shadow: 4px 5px 4px rgba(0, 0, 0, 0.25);
+    margin-top: 20px;
+}
+
+.login_button_1 button a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.baner {
+    display: flex;
+    align-items: start;
+    justify-content: end;
+    width: 70%;
+    z-index: 2;
+}
+
+.baner_img {
+    height: 100%;
+    width: fit-content;
+    justify-content: center;
+}
+
+.shape {
+    background-color: azure;
+    width: 50%;
+    height: 70%;
+    position: absolute;
+    border-radius: 40% 30% 0% 20%;
+    top: 20px;
+    right: 0;
+    z-index: 1;
+}
+
+@media screen and (max-width: 1170px) {
+    .home {
+        min-height: 100%;
+        padding-top: 0px;
+    }
+
+    .baner,
+    .baner_img,
+    .home .shape {
+    display: none;
+    }
+
+    .texto {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+    }
+}

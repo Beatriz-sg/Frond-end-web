@@ -1,0 +1,349 @@
+.pedidosPage {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.headerLeft h2 {
+    margin: 0 0 5px 0;
+    color: #1F2937;
+    font-size: 28px;
+}
+
+.headerLeft p {
+    margin: 0;
+    color: #6B7280;
+    font-size: 16px;
+}
+
+.agendarBtn {
+    background: #8B5CF6;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.agendarBtn:hover {
+    background: #7C3AED;
+}
+
+.headerActions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.viewToggle {
+    display: flex;
+    background: #F3F4F6;
+    border-radius: 8px;
+    padding: 2px;
+}
+
+.toggleBtn {
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    color: #6B7280;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggleBtn.active {
+    background: white;
+    color: #8B5CF6;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.filters {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    align-items: center;
+}
+
+.searchBox {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+}
+
+.searchBox svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9CA3AF;
+}
+
+.searchBox input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.statusFilter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6B7280;
+}
+
+.statusFilter select {
+    padding: 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+}
+
+.pedidosGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.pedidoCard {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #E5E7EB;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pedidoCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.pedidoId {
+    font-weight: 700;
+    color: #374151;
+    font-size: 16px;
+}
+
+.statusBadge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.cardContent h3 {
+    margin: 0 0 8px 0;
+    color: #1F2937;
+    font-size: 18px;
+}
+
+.cardContent p {
+    margin: 0 0 15px 0;
+    color: #6B7280;
+    font-size: 14px;
+}
+
+.pedidoMeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.valor {
+    font-weight: 700;
+    color: #059669;
+    font-size: 16px;
+}
+
+.data {
+    color: #6B7280;
+    font-size: 12px;
+}
+
+.cardActions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.cardActions button {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.viewBtn {
+    background: #F3F4F6;
+    color: #6B7280;
+}
+
+.viewBtn:hover {
+    background: #E5E7EB;
+}
+
+.approveBtn {
+    background: #D1FAE5;
+    color: #059669;
+}
+
+.approveBtn:hover {
+    background: #A7F3D0;
+}
+
+.rejectBtn {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+.rejectBtn:hover {
+    background: #FECACA;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 0 20px;
+    border-bottom: 1px solid #E5E7EB;
+    margin-bottom: 20px;
+}
+
+.modalHeader h3 {
+    margin: 0;
+    color: #1F2937;
+    font-size: 20px;
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    color: #6B7280;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.modalContent {
+    padding: 0 20px;
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 6px;
+    color: #374151;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.formGroup input,
+.formGroup textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.formGroup textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.formRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.modalActions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding: 20px;
+    border-top: 1px solid #E5E7EB;
+}
+
+.cancelBtn {
+    padding: 12px 20px;
+    border: 1px solid #D1D5DB;
+    background: white;
+    color: #6B7280;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.confirmBtn {
+    padding: 12px 20px;
+    background: #8B5CF6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.confirmBtn:hover {
+    background: #7C3AED;
+}

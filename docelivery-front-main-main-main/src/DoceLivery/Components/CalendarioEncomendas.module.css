@@ -1,0 +1,111 @@
+.calendario {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendarioHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendarioHeader button {
+    background: #F3F4F6;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.calendarioHeader button:hover {
+    background: #E5E7EB;
+}
+
+.calendarioHeader h3 {
+    margin: 0;
+    color: #1F2937;
+    font-size: 20px;
+}
+
+.diasSemana {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    margin-bottom: 10px;
+}
+
+.diaSemana {
+    padding: 12px;
+    text-align: center;
+    font-weight: 600;
+    color: #6B7280;
+    font-size: 14px;
+}
+
+.diasGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: #E5E7EB;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.diaCell {
+    background: white;
+    min-height: 80px;
+    padding: 8px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.diaCell:hover {
+    background: #F9FAFB;
+}
+
+.diaCell.hoje {
+    background: #EEF2FF;
+    border: 2px solid #8B5CF6;
+}
+
+.diaCell.temEncomenda {
+    background: #FEF3C7;
+}
+
+.numeroDia {
+    font-weight: 600;
+    color: #374151;
+    font-size: 14px;
+}
+
+.encomendaItem {
+    background: #8B5CF6;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    margin-top: 4px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.horario {
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+.cliente {
+    opacity: 0.9;
+}

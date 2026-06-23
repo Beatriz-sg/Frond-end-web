@@ -1,0 +1,74 @@
+/* src/components/Agenda.css */
+
+.agenda_container {
+    padding: 20px;
+}
+
+.agenda_title {
+    color: #c71585;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.rbc_calendar {
+    font-family: 'Arial', sans-serif;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.rbc_header {
+    background-color: #f7f3f7;
+    color: #555;
+}
+
+.rbc_day_bg {
+    background-color: #fff;
+}
+
+.rbc_day_bg.rbc_today {
+    background-color: #ffe4e1 !important; /* Rosa claro para o dia atual */
+}
+
+/* Estilização para os eventos de vagas */
+.rbc_event {
+    border-radius: 5px;
+    padding: 2px 5px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.vagas_altas {
+    background-color: #4CAF50 !important; /* Verde */
+}
+
+.vagas_baixas {
+    background-color: #FFC107 !important; /* Amarelo */
+}
+
+.vagas_esgotadas {
+    background-color: #F44336 !important; /* Vermelho */
+}
+
+/* Cores de legenda */
+.vagas_info {
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #777;
+}
+
+.vagas_altas_cor {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.vagas_baixas_cor {
+    color: #FFC107;
+    font-weight: bold;
+}
+
+.vagas_esgotadas_cor {
+    color: #F44336;
+    font-weight: bold;
+}

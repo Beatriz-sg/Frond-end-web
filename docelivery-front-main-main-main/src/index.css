@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Savate:ital,wght@0,200..900;1,200..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Merriweather', serif;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(255, 153, 218);
+    color: #333;
+}
+
+.section {
+    padding: 1.5rem 6rem;
+}
+
+.section_titulo {
+    font-size: 2.5rem;
+    color:blueviolet;
+    margin-bottom: 1rem;
+}
+
+.titulo_lojas {
+    font-size: 2.1875rem;
+    color: #FFF;
+    margin-bottom: 2rem;
+}
+
+.footer_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 6rem;
+    background-color: rgb(255, 153, 218);
+    color: #FFF;
+}

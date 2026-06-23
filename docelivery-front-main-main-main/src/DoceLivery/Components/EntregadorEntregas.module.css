@@ -1,0 +1,145 @@
+.entregasContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.entregasHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.entregasHeader h2 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.filtros {
+  display: flex;
+  background: white;
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filtros button {
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.filtros button.active {
+  background: linear-gradient(135deg, #ff69b4, #8a2be2);
+  color: white;
+}
+
+.entregasList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.entregaCard {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.entregaCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.entregaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.entregaId strong {
+  color: #1f2937;
+  font-size: 1rem;
+}
+
+.entregaData {
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-left: 10px;
+}
+
+.entregaStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.entregaContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.clienteInfo h4 {
+  margin: 0 0 5px 0;
+  color: #1f2937;
+  font-size: 1rem;
+}
+
+.clienteInfo p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.pedidoInfo p {
+  margin: 0 0 10px 0;
+  color: #374151;
+  font-weight: 500;
+}
+
+.entregaMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.valor {
+  color: #10b981;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.avaliacao {
+  font-size: 0.9rem;
+}
+
+.semAvaliacao {
+  color: #9ca3af;
+}
+
+@media (max-width: 768px) {
+  .entregasHeader {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  
+  .entregaContent {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}

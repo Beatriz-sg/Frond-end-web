@@ -1,0 +1,107 @@
+.modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1500;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+}
+
+.modal_content {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 10px 25px rgba(138, 43, 226, 0.15);
+    border: 2px solid rgba(138, 43, 226, 0.1);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal_title {
+    margin: 0 0 1.5rem 0;
+    color: #8a2be2;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-align: center;
+    border-bottom: 2px solid rgba(138, 43, 226, 0.2);
+    padding-bottom: 0.5rem;
+}
+
+.modal_message {
+    margin: 1rem 0;
+    color: #444;
+    line-height: 1.6;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.modal_message strong {
+    color: #8a2be2;
+    font-weight: 600;
+}
+
+.modal_actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.cancel_btn, .confirm_btn {
+    flex: 1;
+    padding: 0.875rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.cancel_btn {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+
+.cancel_btn:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    color: #495057;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.confirm_btn {
+    background: linear-gradient(135deg, #ff69b4 0%, #8a2be2 100%);
+    color: white;
+    border: 2px solid transparent;
+}
+
+.confirm_btn:hover {
+    background: linear-gradient(135deg, #ff1493 0%, #6a1ebf 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(138, 43, 226, 0.3);
+}
+
+.confirm_btn:active, .cancel_btn:active {
+    transform: translateY(0);
+}
