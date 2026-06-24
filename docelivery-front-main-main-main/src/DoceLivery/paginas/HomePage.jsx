@@ -179,12 +179,13 @@ const HomePage = () => {
   // 4. Carregamento de Sessão do Usuário Local
   useEffect(() => {
     const carregarUsuario = () => {
-      const nome = localStorage.getItem("userName");
+      const nome  = localStorage.getItem("userName");
       const email = localStorage.getItem("userEmail");
+      const foto  = localStorage.getItem("userFoto") || null;
       const userRaw = localStorage.getItem("user");
       const userObj = userRaw ? JSON.parse(userRaw) : null;
       const nomeReal = nome || userObj?.nome || userObj?.name || null;
-      setUser(nomeReal ? { name: nomeReal, email } : null);
+      setUser(nomeReal ? { name: nomeReal, email, foto } : null);
       const saved = localStorage.getItem("savedAddresses");
       if (saved) setSavedAddresses(JSON.parse(saved));
     };
@@ -395,7 +396,9 @@ const HomePage = () => {
                 onClick={() => navigate("/docelivery/cliente/perfil")}
                 title="Meu Perfil"
               >
-                <IoPersonOutline size={20} />
+                {user.foto
+                  ? <img src={user.foto} alt="avatar" className={Styles.header_avatar} />
+                  : <IoPersonOutline size={20} />}
               </button>
 
               <button className={Styles.cart_btn} onClick={toggleCart}>

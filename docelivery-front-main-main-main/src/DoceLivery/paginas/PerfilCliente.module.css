@@ -47,6 +47,15 @@
   transform: scale(1.1);
 }
 
+.avatarWrapper {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
 .avatarCircle {
   width: 70px;
   height: 70px;
@@ -59,7 +68,33 @@
   font-size: 1.8rem;
   font-weight: 700;
   color: white;
-  flex-shrink: 0;
+}
+
+.avatarImg {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  display: block;
+}
+
+.avatarOverlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.1rem;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.avatarWrapper:hover .avatarOverlay {
+  opacity: 1;
 }
 
 .headerInfo h2 {

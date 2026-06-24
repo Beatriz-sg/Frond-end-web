@@ -1351,9 +1351,18 @@ body {
     .store_actions {
         flex-direction: column;
     }
-    
+
     .reviews_modal {
         width: 95%;
         max-height: 90vh;
     }
+}
+
+.header_avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    display: block;
 }

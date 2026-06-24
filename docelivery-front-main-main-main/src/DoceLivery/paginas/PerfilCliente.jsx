@@ -1,73 +1,123 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faSave, faIdCard, faMapMarkerAlt, faHeart, faBan } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faSave, faIdCard, faMapMarkerAlt, faHeart, faBan, faCamera } from '@fortawesome/free-solid-svg-icons';
 import Styles from './PerfilCliente.module.css';
 import ApiService from '../services/api';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://192.168.1.102:8080';
+
+const buildFotoUrl = (foto) => {
+  if (!foto) return null;
+  if (foto.startsWith('http')) return foto;
+  return `${API_BASE}/uploads/${foto}`;
+};
+
+const PREF_KEYS = ['bolos','cupcakes','brigadeiros','tortas','churros','mousses','docinhos','brownies'];
+const REST_KEYS  = ['semGluten','semLactose','vegano','diabetico','semAcucar','semOvos','semNozes'];
+
+const EMPTY_PREFS = Object.fromEntries(PREF_KEYS.map(k => [k, false]));
+const EMPTY_REST  = Object.fromEntries(REST_KEYS.map(k => [k, false]));
+
+// API devolve preferencias/restricoes como array de strings — converte para obj booleano
+const arrayParaObj = (arr, keys) => {
+  const base = Object.fromEntries(keys.map(k => [k, false]));
+  if (Array.isArray(arr)) arr.forEach(v => { if (v in base) base[v] = true; });
+  return base;
+};
+
+// Obj booleano → array de strings para enviar à API
+const objParaArray = (obj) =>
+  Object.entries(obj).filter(([, v]) => v).map(([k]) => k);
+
 const PerfilCliente = () => {
   const [profileData, setProfileData] = useState({
-    id: '',
-    nome: '',
-    apelido: '',
-    email: '',
-    telefone: '',
-    cpf: '',
-    dataNascimento: '',
-    cep: '',
-    logradouro: '',
-    numero: '',
-    complemento: '',
-    bairro: '',
-    cidade: '',
-    estado: '',
-    preferenciasDoces: {
-      bolos: false, cupcakes: false, brigadeiros: false, tortas: false,
-      churros: false, mousses: false, docinhos: false, brownies: false
-    },
-    restricoesAlimentares: {
-      semGluten: false, semLactose: false, vegano: false, diabetico: false,
-      semAcucar: false, semOvos: false, semNozes: false
-    }
+    id: '', nome: '', apelido: '', email: '', telefone: '', cpf: '',
+    dataNascimento: '', cep: '', logradouro: '', numero: '', complemento: '',
+    bairro: '', cidade: '', estado: '', fotoPerfil: '',
+    preferenciasDoces: { ...EMPTY_PREFS },
+    restricoesAlimentares: { ...EMPTY_REST },
   });
 
   const [loading, setLoading] = useState(false);
   const [loadingDados, setLoadingDados] = useState(true);
+  const [fotoPreview, setFotoPreview] = useState(null);
+  const [fotoFile, setFotoFile] = useState(null);
+  const fotoInputRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const carregarDados = async () => {
-      const id = localStorage.getItem('userId');
-      
-      // 1. Carga inicial de dados locais (LocalStorage)
-      const dadosLogin = localStorage.getItem('dadosCliente');
-      const usuarioLocal = dadosLogin ? JSON.parse(dadosLogin) : {};
-      const preferenciasSalvas = localStorage.getItem('clientProfile') ? JSON.parse(localStorage.getItem('clientProfile')) : null;
+      setLoadingDados(true);
+      try {
+        const perfil = await ApiService.get('/cliente/perfil');
+        const p = perfil || {};
 
-      setProfileData(prev => ({
-        ...prev,
-        id: id || '',
-        nome: usuarioLocal.nome || localStorage.getItem('userName') || '',
-        apelido: usuarioLocal.apelido || localStorage.getItem('userApelido') || '',
-        email: usuarioLocal.email || localStorage.getItem('userEmail') || '',
-        telefone: usuarioLocal.telefone || '',
-        cpf: usuarioLocal.cpf || '',
-        dataNascimento: usuarioLocal.dataNascimento || '',
-        cep: usuarioLocal.cep || '',
-        logradouro: usuarioLocal.logradouro || '',
-        numero: usuarioLocal.numero || '',
-        complemento: usuarioLocal.complemento || '',
-        bairro: usuarioLocal.bairro || '',
-        cidade: usuarioLocal.cidade || '',
-        estado: usuarioLocal.uf || usuarioLocal.estado || '',
-        preferenciasDoces: preferenciasSalvas?.preferenciasDoces || prev.preferenciasDoces,
-        restricoesAlimentares: preferenciasSalvas?.restricoesAlimentares || prev.restricoesAlimentares,
-      }));
+        // Normaliza preferências e restrições vindas da API (podem ser objeto ou null)
+        // API retorna as chaves como "preferencias" e "restricoes" (arrays de strings)
+        const prefs = arrayParaObj(p.preferencias, PREF_KEYS);
+        const rest  = arrayParaObj(p.restricoes,   REST_KEYS);
 
-      // 2. Busca dados frescos no Backend (Removido - Usar dados locais do login)
-      // Se precisar buscar dados do servidor, verificar se a rota /api/user/profile existe no backend
-      // Por enquanto, usando dados do localStorage que já foram preenchidos durante o login
-      setLoadingDados(false);
+        setProfileData({
+          id: p.id || localStorage.getItem('userId') || '',
+          nome: p.nome || '',
+          apelido: p.apelido || '',
+          email: p.email || '',
+          telefone: p.telefone || '',
+          cpf: p.cpf || '',
+          dataNascimento: p.dataNascimento ? p.dataNascimento.substring(0, 10) : '',
+          cep: p.cep || '',
+          logradouro: p.logradouro || p.endereco || '',
+          numero: p.numero || '',
+          complemento: p.complemento || '',
+          bairro: p.bairro || '',
+          cidade: p.cidade || '',
+          estado: p.uf || p.estado || '',
+          fotoPerfil: p.fotoPerfil || '',
+          preferenciasDoces: prefs,
+          restricoesAlimentares: rest,
+        });
+
+        const fotoUrl = buildFotoUrl(p.fotoPerfil);
+        setFotoPreview(fotoUrl);
+        localStorage.setItem('userName', p.nome || '');
+        localStorage.setItem('userFoto', fotoUrl || '');
+        window.dispatchEvent(new Event('localStorageUpdate'));
+
+      } catch (error) {
+        console.error('Erro ao carregar perfil da API, usando localStorage:', error);
+
+        // Fallback para localStorage
+        const raw = localStorage.getItem('dadosCliente') || localStorage.getItem('user');
+        const u = raw ? JSON.parse(raw) : {};
+        const savedPrefs = localStorage.getItem('clientProfile');
+        const saved = savedPrefs ? JSON.parse(savedPrefs) : null;
+
+        setProfileData(prev => ({
+          ...prev,
+          id: localStorage.getItem('userId') || '',
+          nome: u.nome || localStorage.getItem('userName') || '',
+          apelido: u.apelido || '',
+          email: u.email || localStorage.getItem('userEmail') || '',
+          telefone: u.telefone || '',
+          cpf: u.cpf || '',
+          dataNascimento: u.dataNascimento || '',
+          cep: u.cep || '',
+          logradouro: u.logradouro || u.endereco || '',
+          numero: u.numero || '',
+          complemento: u.complemento || '',
+          bairro: u.bairro || '',
+          cidade: u.cidade || '',
+          estado: u.uf || u.estado || '',
+          fotoPerfil: u.fotoPerfil || '',
+          preferenciasDoces: arrayParaObj(saved?.preferencias, PREF_KEYS),
+          restricoesAlimentares: arrayParaObj(saved?.restricoes, REST_KEYS),
+        }));
+
+        setFotoPreview(buildFotoUrl(u.fotoPerfil));
+      } finally {
+        setLoadingDados(false);
+      }
     };
 
     carregarDados();
@@ -87,20 +137,19 @@ const PerfilCliente = () => {
         .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
     }
     if (name === 'cep') {
-        return digits.slice(0, 8).replace(/(\d{5})(\d{1,3})$/, '$1-$2');
+      return digits.slice(0, 8).replace(/(\d{5})(\d{1,3})$/, '$1-$2');
     }
     return value;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    // Tratamento especial para CEP e Busca Automática
+
     if (name === 'cep') {
       const maskedCep = applyMask('cep', value);
       const digits = value.replace(/\D/g, '');
       setProfileData(prev => ({ ...prev, cep: maskedCep }));
-      
+
       if (digits.length === 8) {
         fetch(`https://viacep.com.br/ws/${digits}/json/`)
           .then(r => r.json())
@@ -126,49 +175,75 @@ const PerfilCliente = () => {
   const handlePreferenceChange = (category, preference) => {
     setProfileData(prev => ({
       ...prev,
-      [category]: { ...prev[category], [preference]: !prev[category][preference] }
+      [category]: { ...prev[category], [preference]: !prev[category][preference] },
     }));
+  };
+
+  const handleFotoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setFotoFile(file);
+    setFotoPreview(URL.createObjectURL(file));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      const idUsuario = profileData.id || localStorage.getItem('userId');
-      
+      // 1. Upload de foto separado via POST /api/cliente/foto
+      let novaFotoPerfil = profileData.fotoPerfil;
+      if (fotoFile) {
+        const fd = new FormData();
+        fd.append('foto', fotoFile);
+        const fotoResp = await ApiService.post('/cliente/foto', fd);
+        novaFotoPerfil = fotoResp.fotoPerfil || novaFotoPerfil;
+      }
+
+      // 2. PUT /api/cliente/perfil — preferencias e restricoes como arrays de strings
       const dadosParaEnviar = {
-        id: idUsuario,
         nome: profileData.nome,
         apelido: profileData.apelido,
-        cpf: profileData.cpf,
         email: profileData.email,
         telefone: profileData.telefone,
         cep: profileData.cep,
-        // Concatena endereço para o padrão do Banco Java (Limite 100 caracteres)
-        endereco: `${profileData.logradouro}, ${profileData.numero}${profileData.complemento ? ' - ' + profileData.complemento : ''}`.substring(0, 100),
+        logradouro: profileData.logradouro,
+        numero: profileData.numero,
+        complemento: profileData.complemento,
         bairro: profileData.bairro,
         cidade: profileData.cidade,
-        uf: profileData.estado,
+        estado: profileData.estado,
         dataNascimento: profileData.dataNascimento,
-        codStatus: true
+        preferencias: objParaArray(profileData.preferenciasDoces),
+        restricoes: objParaArray(profileData.restricoesAlimentares),
+        codStatus: true,
       };
 
-      // Chamada PUT para o backend
-      await ApiService.put(`/atualizar/${idUsuario}`, dadosParaEnviar);
+      const p = await ApiService.put('/cliente/perfil', dadosParaEnviar);
 
-      // Sincroniza LocalStorage
-      localStorage.setItem('clientProfile', JSON.stringify(profileData));
-      localStorage.setItem('userName', profileData.nome);
-      localStorage.setItem('userApelido', profileData.apelido);
-      localStorage.setItem('dadosCliente', JSON.stringify(profileData));
+      // 3. Atualiza estado com resposta da API
+      const fotoPerfil = p.fotoPerfil || novaFotoPerfil;
+      const novaFotoUrl = buildFotoUrl(fotoPerfil);
+
+      setProfileData(prev => ({
+        ...prev, ...p,
+        fotoPerfil,
+        estado: p.estado || prev.estado,
+        preferenciasDoces: arrayParaObj(p.preferencias, PREF_KEYS),
+        restricoesAlimentares: arrayParaObj(p.restricoes, REST_KEYS),
+      }));
+      setFotoPreview(novaFotoUrl);
+      setFotoFile(null);
+
+      // 4. Sincroniza localStorage → header reage via evento
+      localStorage.setItem('userName', p.nome || profileData.nome);
+      localStorage.setItem('userFoto', novaFotoUrl || '');
+      localStorage.setItem('clientProfile', JSON.stringify(p));
+      window.dispatchEvent(new Event('localStorageUpdate'));
 
       alert('Perfil atualizado com sucesso!');
-      navigate('/docelivery/cliente/Home-Page');
-
     } catch (error) {
       console.error('Erro ao salvar perfil:', error);
-      alert('Erro ao salvar perfil. Verifique os dados ou tente novamente mais tarde.');
+      alert('Erro ao salvar perfil. Verifique os dados ou tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -204,7 +279,24 @@ const PerfilCliente = () => {
           <button className={Styles.backBtn} onClick={() => navigate('/docelivery/cliente/Home-Page')}>
             <FontAwesomeIcon icon={faArrowLeft} />
           </button>
-          <div className={Styles.avatarCircle}>{inicialNome}</div>
+
+          <div className={Styles.avatarWrapper} onClick={() => fotoInputRef.current?.click()}>
+            {fotoPreview
+              ? <img src={fotoPreview} alt="Foto de perfil" className={Styles.avatarImg} />
+              : <div className={Styles.avatarCircle}>{inicialNome}</div>
+            }
+            <div className={Styles.avatarOverlay}>
+              <FontAwesomeIcon icon={faCamera} />
+            </div>
+            <input
+              ref={fotoInputRef}
+              type="file"
+              accept="image/*"
+              style={{ display: 'none' }}
+              onChange={handleFotoChange}
+            />
+          </div>
+
           <div className={Styles.headerInfo}>
             <h2>{profileData.nome || 'Meu Perfil'}</h2>
             <p>{profileData.email}</p>
@@ -257,7 +349,7 @@ const PerfilCliente = () => {
                   <input type="text" name="cep" value={profileData.cep} onChange={handleChange} placeholder="00000-000" maxLength={9} />
                 </div>
                 <div className={Styles.formGroup}>
-                  <label>Estado</label>
+                  <label>Estado (UF)</label>
                   <input type="text" name="estado" value={profileData.estado} onChange={handleChange} placeholder="UF" maxLength={2} />
                 </div>
               </div>

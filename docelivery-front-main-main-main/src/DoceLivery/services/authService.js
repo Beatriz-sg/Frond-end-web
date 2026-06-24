@@ -46,6 +46,14 @@ class AuthService {
         if (u.email) localStorage.setItem('userEmail', u.email);
         if (u.cpf) localStorage.setItem('userCpf', u.cpf);
 
+        if (u.fotoPerfil !== undefined) {
+          const API_BASE = import.meta?.env?.VITE_API_URL || 'http://192.168.1.102:8080';
+          const fotoUrl = u.fotoPerfil
+            ? (u.fotoPerfil.startsWith('http') ? u.fotoPerfil : `${API_BASE}/uploads/${u.fotoPerfil}`)
+            : '';
+          localStorage.setItem('userFoto', fotoUrl);
+        }
+
         if (u.telefone || u.contato) localStorage.setItem('userTelefone', u.telefone || u.contato);
         if (u.dataNascimento) localStorage.setItem('userDataNascimento', u.dataNascimento);
 
@@ -84,13 +92,25 @@ class AuthService {
     try {
       const response = await ApiService.post(API_ENDPOINTS.AUTH.LOGIN_CLIENTE, credenciais);
       this._salvarDadosUsuario(response, 'cliente');
-      const emailParaBuscar = credenciais.email || response.user?.email || response.data?.email || localStorage.getItem('userEmail');
-      try { await this.fetchAndSaveProfile(emailParaBuscar, undefined, 'cliente'); } catch (e) { console.warn('Não foi possível buscar perfil após login cliente', e); }
+      try { await this.fetchClienteProfile(); } catch (e) { console.warn('Não foi possível buscar perfil após login cliente', e); }
       return response;
     } catch (error) {
       console.error("Erro detalhado no login:", error.response?.data);
       throw error;
     }
+  }
+
+  async fetchClienteProfile() {
+    const perfil = await ApiService.get('/cliente/perfil');
+    if (!perfil) return;
+    const API_BASE = import.meta?.env?.VITE_API_URL || 'http://192.168.1.102:8080';
+    const fotoUrl = perfil.fotoPerfil
+      ? (perfil.fotoPerfil.startsWith('http') ? perfil.fotoPerfil : `${API_BASE}/uploads/${perfil.fotoPerfil}`)
+      : '';
+    if (perfil.nome) localStorage.setItem('userName', perfil.nome);
+    localStorage.setItem('userFoto', fotoUrl);
+    window.dispatchEvent(new Event('localStorageUpdate'));
+    return perfil;
   }
 
   async loginConfeiteiro(credentials) {
