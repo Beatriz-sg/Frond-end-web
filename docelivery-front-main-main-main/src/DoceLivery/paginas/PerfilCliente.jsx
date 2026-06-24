@@ -19,10 +19,42 @@ const REST_KEYS  = ['semGluten','semLactose','vegano','diabetico','semAcucar','s
 const EMPTY_PREFS = Object.fromEntries(PREF_KEYS.map(k => [k, false]));
 const EMPTY_REST  = Object.fromEntries(REST_KEYS.map(k => [k, false]));
 
+// Mapa de normalização: variações da API → chave camelCase do front
+const NORM_MAP = {
+  // preferências
+  bolos: 'bolos', bolo: 'bolos',
+  cupcakes: 'cupcakes', cupcake: 'cupcakes',
+  brigadeiros: 'brigadeiros', brigadeiro: 'brigadeiros',
+  tortas: 'tortas', torta: 'tortas',
+  churros: 'churros', churro: 'churros',
+  mousses: 'mousses', mousse: 'mousses',
+  docinhos: 'docinhos', docinho: 'docinhos',
+  brownies: 'brownies', brownie: 'brownies',
+  // restrições
+  semgluten: 'semGluten', 'sem gluten': 'semGluten', 'sem glúten': 'semGluten',
+  semlactose: 'semLactose', 'sem lactose': 'semLactose',
+  vegano: 'vegano', vegana: 'vegano',
+  diabetico: 'diabetico', diabético: 'diabetico',
+  semacucar: 'semAcucar', 'sem açúcar': 'semAcucar', 'sem acucar': 'semAcucar',
+  semovos: 'semOvos', 'sem ovos': 'semOvos',
+  semnozes: 'semNozes', 'sem nozes': 'semNozes',
+};
+
 // API devolve preferencias/restricoes como array de strings — converte para obj booleano
 const arrayParaObj = (arr, keys) => {
   const base = Object.fromEntries(keys.map(k => [k, false]));
-  if (Array.isArray(arr)) arr.forEach(v => { if (v in base) base[v] = true; });
+  if (Array.isArray(arr)) {
+    arr.forEach(v => {
+      const raw = String(v).trim();
+      // tenta match exato primeiro, depois normalizado
+      if (raw in base) {
+        base[raw] = true;
+      } else {
+        const normalizado = NORM_MAP[raw.toLowerCase()];
+        if (normalizado && normalizado in base) base[normalizado] = true;
+      }
+    });
+  }
   return base;
 };
 
