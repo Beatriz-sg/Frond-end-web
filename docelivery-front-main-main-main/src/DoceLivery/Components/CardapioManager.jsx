@@ -335,6 +335,9 @@ const CardapioManager = () => {
       })),
     };
 
+    console.log("Preço digitado:", formData.preco);
+    console.log("Dados do kit:", dadosDoKit);
+
     // Usa nome diferente para não sobrescrever o estado formData
     const multipart = new FormData();
     if (arquivoImagem) multipart.append("imagem", arquivoImagem);
@@ -343,15 +346,22 @@ const CardapioManager = () => {
       new Blob([JSON.stringify(dadosDoKit)], { type: "application/json" }),
     );
 
-    try {
+    if (editingItem) {
+      await ApiService.put(`/produtos/kit/${editingItem.id}`, multipart);
+    } else {
       await ApiService.post("/produtos/kit", multipart);
-      alert("Kit cadastrado com sucesso!");
-      setShowModal(false);
-      carregarProdutos();
-    } catch (error) {
-      console.error("Erro ao salvar o kit:", error);
-      alert("Erro ao salvar o kit. Verifique o console.");
     }
+
+    alert(
+      editingItem ? "Kit atualizado com sucesso!" : "Kit criado com sucesso!",
+    );
+
+    setShowModal(false);
+    setEditingItem(null);
+    setArquivoImagem(null);
+    setPreviewUrl(null);
+
+    await carregarProdutos();
   };
 
   const handleFileChange = (e) => {
@@ -611,7 +621,20 @@ const CardapioManager = () => {
             {combos.map((combo) => (
               <div key={combo.id} className={Styles.comboCard}>
                 <div className={Styles.kitIconWrapper}>
-                  <IoGift size={24} />
+                  {combo.imagemUrl ? (
+                    <img
+                      src={`${IMAGE_URL}/${combo.imagemUrl}`}
+                      alt={combo.nome}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: "12px",
+                      }}
+                    />
+                  ) : (
+                    <IoGift size={24} />
+                  )}
                 </div>
                 <div className={Styles.comboInfo}>
                   <h4>{combo.nome}</h4>
@@ -631,7 +654,7 @@ const CardapioManager = () => {
                     </p>
                   )}
                   <span className={Styles.comboPreco}>
-                    R$ {Number(combo.precoTotal || 0).toFixed(2)}
+                    R$ {Number(combo.preco || combo.precoTotal || 0).toFixed(2)}
                   </span>
                 </div>
                 <div className={Styles.comboActions}>
