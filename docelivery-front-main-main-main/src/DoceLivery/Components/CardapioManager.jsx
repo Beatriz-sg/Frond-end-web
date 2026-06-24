@@ -250,30 +250,16 @@ const CardapioManager = () => {
   };
 
   const toggleDisponibilidade = async (id) => {
-    const produto = produtosDisponiveis.find((p) => p.id === id);
-    if (!produto) return;
     try {
-      // Extrai nome da categoria (pode ser string, objeto ou ID) e mapeia para ID
-      const categoriaNome =
-        typeof produto.categoria === "object"
-          ? produto.categoria?.descricao
-          : produto.categoria;
-      const mappedCategoriaId = getCategoryInfo(categoriaNome)?.id || null;
+      await ProdutoService.desativarProduto(id);
 
-      const atualizado = {
-        nome: produto.nome,
-        preco: parseFloat(produto.preco) || 0,
-        estoque: parseInt(produto.estoque) || 0,
-        descricao: produto.descricao || "",
-        disponivel: !produto.disponivel,
-        categoriaId: mappedCategoriaId,
-      };
+      alert("Produto desativado com sucesso!");
 
-      await ProdutoService.atualizarProduto(id, atualizado, null);
       carregarProdutos();
     } catch (error) {
       console.error(error);
-      alert("Erro ao atualizar disponibilidade.");
+
+      alert("Erro ao desativar produto.");
     }
   };
 
@@ -327,6 +313,7 @@ const CardapioManager = () => {
       nome: formData.nome,
       descricao: formData.descricao,
       preco: parseFloat(formData.preco) || 0,
+      estoque: parseInt(formData.estoque) || 0,
       confeiteiroId: parseInt(logadoConfeiteiroId, 10),
       categoriaId: 12,
       itens: produtosSelecionados.map((produto) => ({
@@ -336,7 +323,7 @@ const CardapioManager = () => {
     };
 
     console.log("Preço digitado:", formData.preco);
-    console.log("Dados do kit:", dadosDoKit);
+    console.log("Dados do kit:", JSON.stringify(dadosDoKit, null, 2));
 
     // Usa nome diferente para não sobrescrever o estado formData
     const multipart = new FormData();

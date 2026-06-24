@@ -136,6 +136,11 @@ class ProdutoService {
   async deletarProduto(id) {
     return await ApiService.delete(API_ENDPOINTS.PRODUTO.BY_ID(id));
   }
+  async desativarProduto(id) {
+    return await ApiService.put(
+      `${API_ENDPOINTS.PRODUTO.BASE}/${id}/desativar`
+    );
+  }
 }
 
 // Exportando a instância da classe para coincidir com a chamada da HomePage
