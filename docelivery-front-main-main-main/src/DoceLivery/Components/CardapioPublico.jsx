@@ -33,6 +33,10 @@ const CardapioPublico = ({ loja, onOpenEncomendaModal }) => {
     const [loading, setLoading] = useState(true);
     const [produtoDetalhe, setProdutoDetalhe] = useState(null);
     const [categoriaAtiva, setCategoriaAtiva] = useState('Todos');
+    // produtoAvisoMe: holds the product the customer wants to be notified about.
+    // null = modal closed. Set to a product object to open the notification modal.
+    // Ready for future email/push integration: the product id and name are available here.
+    const [produtoAvisoMe, setProdutoAvisoMe] = useState(null);
 
     const lojaLogoSrc = getStoreImageSrc(loja);
     const lojaNome = loja?.nome || loja?.nomeFantasia || loja?.nomeLoja || 'Cardápio';
@@ -110,8 +114,9 @@ const CardapioPublico = ({ loja, onOpenEncomendaModal }) => {
         fetchMenu();
     }, [loja]);
 
-    // Mostra todos os produtos (disponivel true, null ou undefined)
-    const produtosDisponiveis = produtos.filter(p => p.disponivel !== false);
+    // Show all products with disponivel=true (including estoque=0 — shown as "Sem estoque")
+    // Only products with disponivel=false stay hidden
+    const produtosDisponiveis = produtos.filter(p => p.disponivel === true);
 
     // Monta lista de categorias únicas a partir dos produtos
     const categorias = ['Todos', ...new Set(
@@ -223,8 +228,10 @@ const CardapioPublico = ({ loja, onOpenEncomendaModal }) => {
 
                 {produtosFiltrados.length > 0 ? (
                     <div className={Styles.grid}>
-                        {produtosFiltrados.map(produto => (
-                            <div key={produto.id} className={Styles.card}>
+                        {produtosFiltrados.map(produto => {
+                            const semEstoque = produto.estoque !== null && produto.estoque !== undefined && Number(produto.estoque) === 0;
+                            return (
+                            <div key={produto.id} className={`${Styles.card} ${semEstoque ? Styles.cardSemEstoque : ''}`}>
                                 <div className={Styles.imageWrapper}>
                                     {getImageSrc(produto) ? (
                                         <img
@@ -235,8 +242,8 @@ const CardapioPublico = ({ loja, onOpenEncomendaModal }) => {
                                     ) : (
                                         <div className={Styles.imgFallback}>🧁</div>
                                     )}
-                                    <div className={Styles.disponibilidadeBadge}>
-                                        ✅ Disponível
+                                    <div className={semEstoque ? Styles.semEstoqueBadge : Styles.disponibilidadeBadge}>
+                                        {semEstoque ? '🚫 Sem estoque' : '✅ Disponível'}
                                     </div>
                                 </div>
 
@@ -268,18 +275,29 @@ const CardapioPublico = ({ loja, onOpenEncomendaModal }) => {
                                                 <IoInformationCircleOutline size={16} />
                                                 Detalhes
                                             </button>
-                                            <button
-                                                className={Styles.btnAdicionar}
-                                                onClick={() => handleAdicionarAoCarrinho(produto)}
-                                            >
-                                                <IoCartOutline size={16} />
-                                                Adicionar
-                                            </button>
+                                            {semEstoque ? (
+                                                <button
+                                                    className={Styles.btnAviseme}
+                                                    onClick={() => setProdutoAvisoMe(produto)}
+                                                    title="Avise-me quando estiver disponível"
+                                                >
+                                                    🔔 Avise-me
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    className={Styles.btnAdicionar}
+                                                    onClick={() => handleAdicionarAoCarrinho(produto)}
+                                                >
+                                                    <IoCartOutline size={16} />
+                                                    Adicionar
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 ) : (
                     <div className={Styles.emptyState}>
@@ -345,6 +363,72 @@ const CardapioPublico = ({ loja, onOpenEncomendaModal }) => {
                 )}
             </div>
 
+            {/* MODAL AVISE-ME — produto temporariamente sem estoque */}
+            {produtoAvisoMe && (
+                <div
+                    className={Styles.modalOverlay}
+                    onClick={() => setProdutoAvisoMe(null)}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="avisome-titulo"
+                >
+                    <div className={Styles.avisoMeModal} onClick={e => e.stopPropagation()}>
+                        <button
+                            className={Styles.modalClose}
+                            onClick={() => setProdutoAvisoMe(null)}
+                            aria-label="Fechar"
+                        >
+                            <IoCloseOutline size={24} />
+                        </button>
+
+                        {/* Ícone de notificação */}
+                        <div className={Styles.avisoMeIconWrapper}>
+                            <span className={Styles.avisoMeIcon}>🔔</span>
+                        </div>
+
+                        <div className={Styles.avisoMeBody}>
+                            <h3 id="avisome-titulo" className={Styles.avisoMeTitulo}>
+                                Produto temporariamente indisponível
+                            </h3>
+
+                            <p className={Styles.avisoMeProdutoNome}>
+                                {produtoAvisoMe.nome}
+                            </p>
+
+                            <p className={Styles.avisoMeTexto}>
+                                Este produto está temporariamente fora de estoque.
+                                Deseja ser notificado assim que ele estiver disponível novamente?
+                            </p>
+
+                            <div className={Styles.avisoMeActions}>
+                                <button
+                                    className={Styles.avisoMeBtnCancelar}
+                                    onClick={() => setProdutoAvisoMe(null)}
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    className={Styles.avisoMeBtnConfirmar}
+                                    onClick={() => {
+                                        // TODO: integrar com serviço de notificações (e-mail / push)
+                                        // Dados disponíveis: produtoAvisoMe.id, produtoAvisoMe.nome, loja?.id
+                                        console.info('[AvisoMe] Cliente solicitou notificação:', {
+                                            produtoId: produtoAvisoMe.id,
+                                            produtoNome: produtoAvisoMe.nome,
+                                            lojaId: loja?.confeiteiroId || loja?.id,
+                                            lojaNome: loja?.nome,
+                                        });
+                                        setProdutoAvisoMe(null);
+                                    }}
+                                >
+                                    🔔 Quero ser avisado
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* MODAL DE DETALHES DO PRODUTO */}
             {produtoDetalhe && (
                 <div className={Styles.modalOverlay} onClick={() => setProdutoDetalhe(null)}>
@@ -395,9 +479,15 @@ const CardapioPublico = ({ loja, onOpenEncomendaModal }) => {
                                 )}
                                 <div className={Styles.modalInfoItem}>
                                     <span className={Styles.modalInfoLabel}>Disponibilidade</span>
-                                    <span className={`${Styles.modalInfoValue} ${Styles.disponivel}`}>
-                                        ✅ Disponível
-                                    </span>
+                                    {Number(produtoDetalhe.estoque) === 0 ? (
+                                        <span className={`${Styles.modalInfoValue} ${Styles.semEstoqueText}`}>
+                                            🚫 Sem estoque
+                                        </span>
+                                    ) : (
+                                        <span className={`${Styles.modalInfoValue} ${Styles.disponivel}`}>
+                                            ✅ Disponível
+                                        </span>
+                                    )}
                                 </div>
                                 <div className={Styles.modalInfoItem}>
                                     <span className={Styles.modalInfoLabel}>Loja</span>
@@ -413,13 +503,22 @@ const CardapioPublico = ({ loja, onOpenEncomendaModal }) => {
                                     <IoCalendarOutline size={18} />
                                     Encomendar
                                 </button>
-                                <button
-                                    className={Styles.modalBtnCarrinho}
-                                    onClick={() => { handleAdicionarAoCarrinho(produtoDetalhe); setProdutoDetalhe(null); }}
-                                >
-                                    <IoCartOutline size={18} />
-                                    Adicionar ao Carrinho
-                                </button>
+                                {Number(produtoDetalhe.estoque) === 0 ? (
+                                    <button
+                                        className={Styles.modalBtnAviseme}
+                                        onClick={() => { setProdutoDetalhe(null); setProdutoAvisoMe(produtoDetalhe); }}
+                                    >
+                                        🔔 Avise-me quando estiver disponível
+                                    </button>
+                                ) : (
+                                    <button
+                                        className={Styles.modalBtnCarrinho}
+                                        onClick={() => { handleAdicionarAoCarrinho(produtoDetalhe); setProdutoDetalhe(null); }}
+                                    >
+                                        <IoCartOutline size={18} />
+                                        Adicionar ao Carrinho
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>

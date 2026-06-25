@@ -113,7 +113,9 @@ const HomePage = () => {
         // Normaliza os dados de Produtos para o componente OfferItem
         const offersRaw =
           productsData && productsData.length
-            ? productsData.map((p) => ({
+            ? productsData
+                .filter((p) => p.disponivel === true && (p.estoque == null || p.estoque > 0))
+                .map((p) => ({
                 id: p.id,
                 name: p.nome,
                 store: p.loja?.nomeLoja || p.nomeLoja || "Confeitaria Doce",
@@ -227,7 +229,9 @@ const HomePage = () => {
       const productsData = await ProductService.getProdutos();
       if (!productsData) return;
 
-      const mapped = productsData.map((p) => ({
+      const mapped = productsData
+        .filter((p) => p.disponivel === true && (p.estoque == null || p.estoque > 0))
+        .map((p) => ({
         id: p.id,
         name: p.nome,
         store: p.loja?.nomeLoja || "Confeitaria Doce",

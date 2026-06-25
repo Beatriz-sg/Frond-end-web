@@ -249,17 +249,23 @@ const CardapioManager = () => {
     }
   };
 
-  const toggleDisponibilidade = async (id) => {
+  const toggleDisponibilidade = async (produto) => {
+    const novoEstado = !produto.disponivel;
+    // Optimistic update: reflect the change immediately in the UI
+    setProdutosDisponiveis((prev) =>
+      prev.map((p) => (p.id === produto.id ? { ...p, disponivel: novoEstado } : p))
+    );
     try {
-      await ProdutoService.desativarProduto(id);
-
-      alert("Produto desativado com sucesso!");
-
+      await ProdutoService.toggleDisponibilidade(produto.id, novoEstado);
+      // Sync with server after success to ensure consistency
       carregarProdutos();
     } catch (error) {
       console.error(error);
-
-      alert("Erro ao desativar produto.");
+      // Revert optimistic update on failure
+      setProdutosDisponiveis((prev) =>
+        prev.map((p) => (p.id === produto.id ? { ...p, disponivel: produto.disponivel } : p))
+      );
+      alert('Erro ao alterar disponibilidade do produto.');
     }
   };
 
@@ -538,10 +544,14 @@ const CardapioManager = () => {
         className={`${Styles.produtosGrid} ${viewMode === "list" ? Styles.listView : ""}`}
       >
         {produtosFiltrados.length > 0 ? (
-          produtosFiltrados.map((produto) => (
+          produtosFiltrados.map((produto) => {
+            const semEstoque = produto.estoque != null && produto.estoque <= 0;
+            // A product is hidden from customers if disabled OR out of stock
+            const ocultoDosClientes = !produto.disponivel || semEstoque;
+            return (
             <div
               key={produto.id}
-              className={`${Styles.produtoCard} ${!produto.disponivel ? Styles.indisponivel : ""}`}
+              className={`${Styles.produtoCard} ${ocultoDosClientes ? Styles.indisponivel : ""}`}
             >
               <div className={Styles.produtoImagem}>
                 <img
@@ -549,7 +559,10 @@ const CardapioManager = () => {
                   alt={produto.nome}
                 />
                 {!produto.disponivel && (
-                  <div className={Styles.indisponivelOverlay}>Indisponível</div>
+                  <div className={Styles.indisponivelOverlay}>Desativado</div>
+                )}
+                {produto.disponivel && semEstoque && (
+                  <div className={Styles.indisponivelOverlay} style={{ backgroundColor: 'rgba(234, 88, 12, 0.85)' }}>Sem Estoque</div>
                 )}
               </div>
               <div className={Styles.produtoInfo}>
@@ -565,11 +578,17 @@ const CardapioManager = () => {
                       : "Sem Categoria"}
                   </span>
                 </div>
+                {ocultoDosClientes && (
+                  <span style={{ fontSize: '11px', color: '#dc2626', fontWeight: 600 }}>
+                    👁️ Oculto dos clientes
+                  </span>
+                )}
               </div>
               <div className={Styles.produtoActions}>
                 <button
                   className={Styles.toggleBtn}
-                  onClick={() => toggleDisponibilidade(produto.id)}
+                  onClick={() => toggleDisponibilidade(produto)}
+                  title={produto.disponivel ? "Desativar produto (ocultar dos clientes)" : "Ativar produto (exibir para clientes)"}
                 >
                   {produto.disponivel ? "Desativar" : "Ativar"}
                 </button>
@@ -587,7 +606,8 @@ const CardapioManager = () => {
                 </button>
               </div>
             </div>
-          ))
+            );
+          })
         ) : (
           <p className={Styles.emptyMessage}>Nenhum produto cadastrado.</p>
         )}

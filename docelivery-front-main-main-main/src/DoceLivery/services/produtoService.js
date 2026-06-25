@@ -109,7 +109,8 @@ class ProdutoService {
       descricao: dados.descricao,
       preco: typeof dados.preco === 'string' ? parseFloat(dados.preco) : dados.preco,
       estoque: typeof dados.estoque === 'string' ? parseInt(dados.estoque) || 0 : dados.estoque,
-      categoriaId: dados.categoriaId ? parseInt(dados.categoriaId) : null
+      categoriaId: dados.categoriaId ? parseInt(dados.categoriaId) : null,
+      disponivel: dados.disponivel !== undefined ? dados.disponivel : true
     };
 
     formData.append(
@@ -136,9 +137,10 @@ class ProdutoService {
   async deletarProduto(id) {
     return await ApiService.delete(API_ENDPOINTS.PRODUTO.BY_ID(id));
   }
-  async desativarProduto(id) {
+  async toggleDisponibilidade(id, disponivel) {
     return await ApiService.put(
-      `${API_ENDPOINTS.PRODUTO.BASE}/${id}/desativar`
+      `${API_ENDPOINTS.PRODUTO.BASE}/${id}/disponibilidade`,
+      { disponivel }
     );
   }
 }
