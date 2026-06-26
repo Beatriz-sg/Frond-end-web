@@ -4,13 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faSave, faIdCard, faMapMarkerAlt, faHeart, faBan, faCamera } from '@fortawesome/free-solid-svg-icons';
 import Styles from './PerfilCliente.module.css';
 import ApiService from '../services/api';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://192.168.1.102:8080';
+import { API_UPLOADS_URL } from '../config/api.config';
 
 const buildFotoUrl = (foto) => {
   if (!foto) return null;
   if (foto.startsWith('http')) return foto;
-  return `${API_BASE}/uploads/${foto}`;
+  return `${API_UPLOADS_URL}/${foto}`;
 };
 
 const PREF_KEYS = ['bolos','cupcakes','brigadeiros','tortas','churros','mousses','docinhos','brownies'];

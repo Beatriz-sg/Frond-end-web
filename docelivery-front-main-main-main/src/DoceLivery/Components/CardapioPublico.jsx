@@ -4,9 +4,9 @@ import ApiService from '../services/api';
 import Styles from './CardapioPublico.module.css';
 import { useCartStore } from '../context/CartContext.jsx';
 import { IoCartOutline, IoCalendarOutline, IoCloseOutline, IoInformationCircleOutline, IoStorefront, IoGift } from 'react-icons/io5';
+import { API_BASE_URL, API_UPLOADS_URL } from '../config/api.config';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
-const IMAGE_URL = `${API_BASE_URL}/uploads`;
+const IMAGE_URL = API_UPLOADS_URL;
 
 const buildImageSrc = (rawImage) => {
     if (!rawImage) return null;

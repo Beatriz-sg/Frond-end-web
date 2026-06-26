@@ -3,12 +3,18 @@ import ApiService from './api';
 class KitService {
     _buildFormData(kitPayload, imagemFile) {
         const formData = new FormData();
-        // Certifique-se que no Java esteja @RequestPart("kit")
-        const blob = new Blob([JSON.stringify(kitPayload)], { type: 'application/json' });
-        
+        // Limpa campos promocionais se o kit não está em oferta
+        const payload = {
+            ...kitPayload,
+            emOferta: kitPayload.emOferta === true,
+            precoPromocional:
+                kitPayload.emOferta === true
+                    ? (kitPayload.precoPromocional || null)
+                    : null,
+        };
+        const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
         formData.append('kit', blob);
         if (imagemFile) formData.append('imagem', imagemFile);
-        
         return formData;
     }
 

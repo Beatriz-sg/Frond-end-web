@@ -1,7 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { useState, useCallback, useMemo, useContext } from 'react';
 import axios from 'axios';
-import { DashboardContext } from './dashboardContextInstance'; // Importa o objeto Context do novo arquivo
+import { DashboardContext } from './dashboardContextInstance';
+import { API_BASE_URL } from '../config/api.config';
 
 export const DashboardProvider = ({ children }) => {
     // Estado inicial zerado/vazio
@@ -103,13 +104,13 @@ export const DashboardProvider = ({ children }) => {
             };
 
             // 1. Procura o resumo dos cards (faturamento, lucro, ticket médio)
-            const respostaResumo = await axios.get(`http://localhost:8080/api/financeiro/resumo/${confeiteiroId}?meses=1`, config);
+            const respostaResumo = await axios.get(`${API_BASE_URL}/api/financeiro/resumo/${confeiteiroId}?meses=1`, config);
             
             // 2. Procura os dados formatados para o gráfico semanal
-            const respostaGraficoSemana = await axios.get(`http://localhost:8080/api/financeiro/vendas-semana/${confeiteiroId}`, config);
+            const respostaGraficoSemana = await axios.get(`${API_BASE_URL}/api/financeiro/vendas-semana/${confeiteiroId}`, config);
             
             // 3. Procura o histórico para a tabela de transações
-            const respostaFluxo = await axios.get(`http://localhost:8080/api/financeiro/fluxo-caixa/${confeiteiroId}`, config);
+            const respostaFluxo = await axios.get(`${API_BASE_URL}/api/financeiro/fluxo-caixa/${confeiteiroId}`, config);
 
             // Atualiza o estado de forma segura usando o espalhamento (...)
             setDashboardData(prev => ({

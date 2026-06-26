@@ -2,6 +2,7 @@ import axios from 'axios';
 import ApiService from './api';
 import ConfeiteiroService from './confeiteiroService';
 import { API_ENDPOINTS } from './constants';
+import { API_BASE_URL } from '../config/api.config';
 
 class AuthService {
   /**
@@ -47,7 +48,6 @@ class AuthService {
         if (u.cpf) localStorage.setItem('userCpf', u.cpf);
 
         if (u.fotoPerfil !== undefined) {
-          const API_BASE = import.meta?.env?.VITE_API_URL || 'http://192.168.1.102:8080';
           const fotoUrl = u.fotoPerfil
             ? (u.fotoPerfil.startsWith('http') ? u.fotoPerfil : `${API_BASE}/uploads/${u.fotoPerfil}`)
             : '';
@@ -103,7 +103,6 @@ class AuthService {
   async fetchClienteProfile() {
     const perfil = await ApiService.get('/cliente/perfil');
     if (!perfil) return;
-    const API_BASE = import.meta?.env?.VITE_API_URL || 'http://192.168.1.102:8080';
     const fotoUrl = perfil.fotoPerfil
       ? (perfil.fotoPerfil.startsWith('http') ? perfil.fotoPerfil : `${API_BASE}/uploads/${perfil.fotoPerfil}`)
       : '';
@@ -165,7 +164,7 @@ class AuthService {
 
       const authToken = token || localStorage.getItem('userToken') || localStorage.getItem('token');
       const resposta = await axios.get(
-        `http://localhost:8080/api/confeiteiro/profile?email=${encodeURIComponent(emailParaBuscar)}`,
+        `${API_BASE_URL}/api/confeiteiro/profile?email=${encodeURIComponent(emailParaBuscar)}`,
         {
           headers: authToken
             ? { Authorization: `Bearer ${authToken}` }

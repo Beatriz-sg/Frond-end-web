@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Styles from './Formulario.module.css';
 import logoImage from '../assests/img/doce_Livre_3.jpg';
+import { API_BASE_URL } from '../config/api.config';
 
 const STEPS = ['Dados Pessoais', 'Confeitaria', 'Acesso'];
 
@@ -120,7 +121,7 @@ const CadastroConfeiteiro = () => {
                 formPayload.append('foto', formData.foto);
             }
 
-            const response = await fetch('http://localhost:8080/api/auth/cadastro/confeiteiro', {
+            const response = await fetch(`${API_BASE_URL}/api/auth/cadastro/confeiteiro`, {
                 method: 'POST',
                 body: formPayload,
             });

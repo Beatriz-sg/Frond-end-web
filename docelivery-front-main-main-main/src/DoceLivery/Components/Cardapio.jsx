@@ -3,6 +3,7 @@ import axios from 'axios';
 import ProdutoForm from './ProdutoForm';
 import ApiService from '../services/api';
 import AuthService from '../services/authService';
+import { API_BASE_URL, API_UPLOADS_URL } from '../config/api.config';
 
 const Cardapio = () => {
     const [produtos, setProdutos] = useState([]);
@@ -59,7 +60,7 @@ const Cardapio = () => {
             if (dadosDoForm.id) {
                 await ApiService.put(`/produtos/${dadosDoForm.id}`, data);
             } else {
-                await axios.post(`http://localhost:8080/api/produtos/com-foto?confeiteiroId=${idLogado}`, data, {
+                await axios.post(`${API_BASE_URL}/api/produtos/com-foto?confeiteiroId=${idLogado}`, data, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -205,8 +206,7 @@ return (
                     {/* Exibição da Imagem do Produto vinda do Backend */}
                     <div style={{ height: '180px', overflow: 'hidden', borderTopLeftRadius: '15px', borderTopRightRadius: '15px', backgroundColor: '#f0f0f0' }}>
                         <img 
-                            // Idealmente, a URL base deve vir de uma configuração global
-                            src={produto.imagemUrl ? `http://localhost:8080/uploads/${produto.imagemUrl}` : "/img/placeholder.png"}
+                            src={produto.imagemUrl ? `${API_UPLOADS_URL}/${produto.imagemUrl}` : "/img/placeholder.png"}
                             alt={produto.nome}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             onError={(e) => { 

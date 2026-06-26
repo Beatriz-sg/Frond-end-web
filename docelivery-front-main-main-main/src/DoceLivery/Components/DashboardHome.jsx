@@ -7,6 +7,7 @@ import AuthService from '../services/authService';
 import ConfeiteiroService from '../services/confeiteiroService'; 
 import SalesChart from './SalesChart';
 import VendasTempoReal from '../Components/VendasTempoReal';
+import { API_UPLOADS_URL } from '../config/api.config';
 
 const DashboardHome = ({ editMode, userData }) => {
     const { storeData, updateStoreData } = useStore();
@@ -201,9 +202,9 @@ const DashboardHome = ({ editMode, userData }) => {
                     {displayStoreData.fotoUrl && (
                         <img 
                             src={
-                                String(displayStoreData.fotoUrl).startsWith('http')
+                        String(displayStoreData.fotoUrl).startsWith('http')
                                     ? displayStoreData.fotoUrl
-                                    : `http://localhost:8080/uploads/${displayStoreData.fotoUrl}`
+                                    : `${API_UPLOADS_URL}/${displayStoreData.fotoUrl}`
                             }
                             alt="Foto da loja"
                             style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginBottom: '10px' }}

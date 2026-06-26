@@ -11,6 +11,7 @@ import FinanceiroModerno from '../Components/FinanceiroModerno';
 import AgendamentosModerno from '../Components/AgendamentosModerno';
 import PerfilLoja from '../Components/PerfilLoja';
 import AppLogo from '../assests/img/doce_Livre_3.jpg';
+import { API_UPLOADS_URL } from '../config/api.config';
 
 const ConfeiteiroDashboard = () => {
   const [secaoAtiva, setSecaoAtiva] = useState('home');
@@ -284,7 +285,7 @@ const ConfeiteiroDashboard = () => {
               perfilUnificado.fotoLoja && perfilUnificado.fotoLoja !== AppLogo
                 ? (String(perfilUnificado.fotoLoja).startsWith('http') 
                     ? perfilUnificado.fotoLoja 
-                    : `http://localhost:8080/uploads/${perfilUnificado.fotoLoja}`)
+                    : `${API_UPLOADS_URL}/${perfilUnificado.fotoLoja}`)
                 : AppLogo
             } 
             alt="Logo da loja" 

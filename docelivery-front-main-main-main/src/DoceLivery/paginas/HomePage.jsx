@@ -31,6 +31,7 @@ import Logoloja from "../assests/img/doce_Livre_3.jpg";
 import Footer from "../Components/Footer.jsx";
 import Styles from "../paginas/HomePage.module.css";
 import { IMAGE_MAP } from "../data/imageImports.jsx";
+import { API_BASE_URL, API_UPLOADS_URL } from "../config/api.config";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -102,7 +103,7 @@ const HomePage = () => {
                   ? `R$ ${s.taxaEntrega.toFixed(2)}`
                   : "R$ 5,00",
                 logoUrl: s.loja?.fotoUrl
-                  ? `http://localhost:8080/imagens/${s.loja.fotoUrl}`
+                  ? `${API_UPLOADS_URL}/${s.loja.fotoUrl}`
                   : IMAGE_MAP["default"],
                 featured: s.destaque || false,
                 lat: s.lat || -23.55052, // Fallbacks caso precise de Geolocalização teste
@@ -111,20 +112,34 @@ const HomePage = () => {
             : [];
 
         // Normaliza os dados de Produtos para o componente OfferItem
+        // Filtra apenas produtos e kits marcados como emOferta === true
         const offersRaw =
           productsData && productsData.length
             ? productsData
-                .filter((p) => p.disponivel === true && (p.estoque == null || p.estoque > 0))
-                .map((p) => ({
-                id: p.id,
-                name: p.nome,
-                store: p.loja?.nomeLoja || p.nomeLoja || "Confeitaria Doce",
-                price: p.preco || 0.0,
-                categoryId: p.categoria?.id || null,
-                imageUrl: p.imagemUrl
-                  ? `http://localhost:8080/imagens/${p.imagemUrl}`
-                  : IMAGE_MAP["default"],
-              }))
+                .filter(
+                  (p) =>
+                    p.emOferta === true &&
+                    p.disponivel === true &&
+                    (p.estoque == null || p.estoque > 0) &&
+                    p.precoPromocional != null,
+                )
+                .map((p) => {
+                  const preco = p.preco || 0;
+                  const precoPromo = p.precoPromocional || 0;
+                  const discount = Math.round(((preco - precoPromo) / preco) * 100);
+                  return {
+                    id: p.id,
+                    name: p.nome,
+                    store: p.loja?.nomeLoja || p.nomeLoja || "Confeitaria Doce",
+                    price: precoPromo,          // preço exibido em destaque
+                    originalPrice: preco,       // preço original com strikethrough
+                    discount,                   // % de desconto calculado no front
+                    categoryId: p.categoria?.id || null,
+                    imageUrl: p.imagemUrl
+                      ? `${API_UPLOADS_URL}/${p.imagemUrl}`
+                      : IMAGE_MAP["default"],
+                  };
+                })
             : [];
 
         setStores(storesRaw);
@@ -230,17 +245,29 @@ const HomePage = () => {
       if (!productsData) return;
 
       const mapped = productsData
-        .filter((p) => p.disponivel === true && (p.estoque == null || p.estoque > 0))
-        .map((p) => ({
-        id: p.id,
-        name: p.nome,
-        store: p.loja?.nomeLoja || "Confeitaria Doce",
-        price: p.preco || 0.0,
-        categoryId: p.categoria?.id || null,
-        imageUrl: p.imagemUrl
-          ? `http://localhost:8080/imagens/${p.imagemUrl}`
-          : IMAGE_MAP["default"],
-      }));
+        .filter((p) =>
+          p.emOferta === true &&
+          p.disponivel === true &&
+          (p.estoque == null || p.estoque > 0) &&
+          p.precoPromocional != null
+        )
+        .map((p) => {
+          const preco = p.preco || 0;
+          const precoPromo = p.precoPromocional || 0;
+          const discount = Math.round(((preco - precoPromo) / preco) * 100);
+          return {
+            id: p.id,
+            name: p.nome,
+            store: p.loja?.nomeLoja || "Confeitaria Doce",
+            price: precoPromo,
+            originalPrice: preco,
+            discount,
+            categoryId: p.categoria?.id || null,
+            imageUrl: p.imagemUrl
+              ? `${API_UPLOADS_URL}/${p.imagemUrl}`
+              : IMAGE_MAP["default"],
+          };
+        });
 
       if (categoryId == null) {
         setOffers(mapped);
@@ -576,35 +603,41 @@ const HomePage = () => {
             </div>
           </div>
           <div className={Styles.offers_carousel}>
-            <div
-              className={Styles.offers_track}
-              style={{
-                transform: `translateX(-${currentOfferIndex * 280}px)`,
-                display: "flex",
-                gap: "20px",
-                transition: "transform 0.4s ease",
-              }}
-            >
-              {offers.map((offer) => (
-                <div
-                  key={offer.id}
-                  className={Styles.offer_wrapper}
-                  style={{ position: "relative" }}
-                >
-                  <button
-                    className={Styles.favorite_btn}
-                    onClick={() => toggleFavoriteProduct(offer)}
+            {offers.length === 0 ? (
+              <p style={{ color: "#888", padding: "16px 0", fontSize: "0.95rem" }}>
+                Nenhuma oferta disponível no momento.
+              </p>
+            ) : (
+              <div
+                className={Styles.offers_track}
+                style={{
+                  transform: `translateX(-${currentOfferIndex * 280}px)`,
+                  display: "flex",
+                  gap: "20px",
+                  transition: "transform 0.4s ease",
+                }}
+              >
+                {offers.map((offer) => (
+                  <div
+                    key={offer.id}
+                    className={Styles.offer_wrapper}
+                    style={{ position: "relative" }}
                   >
-                    {isProductFavorite(offer.id) ? (
-                      <IoHeart size={20} color="#e11d48" />
-                    ) : (
-                      <IoHeartOutline size={20} />
-                    )}
-                  </button>
-                  <OfferItem offer={offer} onClick={handleOfferClick} />
-                </div>
-              ))}
-            </div>
+                    <button
+                      className={Styles.favorite_btn}
+                      onClick={() => toggleFavoriteProduct(offer)}
+                    >
+                      {isProductFavorite(offer.id) ? (
+                        <IoHeart size={20} color="#e11d48" />
+                      ) : (
+                        <IoHeartOutline size={20} />
+                      )}
+                    </button>
+                    <OfferItem offer={offer} onClick={handleOfferClick} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 

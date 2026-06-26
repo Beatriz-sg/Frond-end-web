@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { IoCloudUpload, IoClose } from 'react-icons/io5';
 import Styles from './ImageUploader.module.css';
-
-// Usa a variável de ambiente, com fallback para localhost
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+import { API_UPLOADS_URL } from '../config/api.config';
 
 const resolveImageUrl = (img) => {
     if (!img) return null;
     if (typeof img === 'object') return null; // File object — sem URL ainda
     if (String(img).startsWith('http') || String(img).startsWith('data:') || String(img).startsWith('/src')) return img;
-    return `${API_BASE}/uploads/${img}`;
+    return `${API_UPLOADS_URL}/${img}`;
 };
 
 const ImageUploader = ({ onImageSelect, currentImage }) => {

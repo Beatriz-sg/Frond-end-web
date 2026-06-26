@@ -22,9 +22,9 @@ import {
 } from "react-icons/io5";
 import { IMAGE_MAP } from "../data/imageImports";
 import ImageUploader from "./ImageUploader";
+import { API_BASE_URL, API_UPLOADS_URL } from "../config/api.config";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
-const IMAGE_URL = `${API_BASE_URL}/uploads`;
+const IMAGE_URL = API_UPLOADS_URL;
 
 const buildImageSrc = (rawImage) => {
   if (!rawImage) return null;
@@ -84,6 +84,8 @@ const CardapioManager = () => {
     imagem: "",
     imagemCustom: null,
     produtos: [],
+    emOferta: false,
+    precoPromocional: "",
   });
 
   const imagensDisponiveis = Object.keys(IMAGE_MAP);
@@ -212,6 +214,8 @@ const CardapioManager = () => {
         imagem: item.imagem || "",
         imagemCustom: null,
         produtos: selecionados,
+        emOferta: item.emOferta === true,
+        precoPromocional: item.precoPromocional ?? "",
       });
       setPreviewUrl(getProdutoImageSrc(item));
     } else {
@@ -226,6 +230,8 @@ const CardapioManager = () => {
         imagem: "",
         imagemCustom: null,
         produtos: [],
+        emOferta: false,
+        precoPromocional: "",
       });
       setPreviewUrl(null);
       setArquivoImagem(null);
@@ -326,7 +332,26 @@ const CardapioManager = () => {
         produtoId: produto.id,
         quantidade: 1,
       })),
+      emOferta: formData.emOferta === true,
+      precoPromocional:
+        formData.emOferta === true
+          ? parseFloat(formData.precoPromocional) || null
+          : null,
     };
+
+    // Validação promocional do kit
+    if (formData.emOferta) {
+      const precoProm = parseFloat(formData.precoPromocional);
+      const precoRegular = parseFloat(formData.preco) || 0;
+      if (!formData.precoPromocional || isNaN(precoProm) || precoProm <= 0) {
+        alert("❌ Preço promocional é obrigatório quando o kit está em oferta.");
+        return;
+      }
+      if (precoProm >= precoRegular) {
+        alert("❌ Preço promocional deve ser menor que o preço regular do kit.");
+        return;
+      }
+    }
 
     console.log("Preço digitado:", formData.preco);
     console.log("Dados do kit:", JSON.stringify(dadosDoKit, null, 2));
@@ -413,7 +438,26 @@ const CardapioManager = () => {
         disponivel:
           formData.disponivel === undefined ? true : formData.disponivel,
         categoriaId: mappedId, // 🔴 IMPORTANTE: Enviar como NÚMERO, não como string ou objeto
+        // Campos promocionais
+        emOferta: formData.emOferta === true,
+        precoPromocional:
+          formData.emOferta === true
+            ? parseFloat(formData.precoPromocional) || null
+            : null,
       };
+
+      // ✅ PASSO 4.1: Validação do preço promocional
+      if (formData.emOferta) {
+        const precoProm = parseFloat(formData.precoPromocional);
+        if (!formData.precoPromocional || isNaN(precoProm) || precoProm <= 0) {
+          alert("❌ Preço promocional é obrigatório quando o produto está em oferta.");
+          return;
+        }
+        if (precoProm >= parseFloat(formData.preco)) {
+          alert("❌ Preço promocional deve ser menor que o preço regular.");
+          return;
+        }
+      }
 
       // ✅ PASSO 5: Log detalhado para debug
       console.group("📦 CardapioManager.handleSave() - Iniciando envio");
@@ -904,6 +948,76 @@ const CardapioManager = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* ── Oferta ── */}
+                  <div className={Styles.formGroup} style={{ marginTop: "12px" }}>
+                    <div className={Styles.checkboxGroup}>
+                      <input
+                        type="checkbox"
+                        id="em-oferta-check"
+                        checked={formData.emOferta}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            emOferta: e.target.checked,
+                            // limpa o campo ao desmarcar
+                            precoPromocional: e.target.checked
+                              ? formData.precoPromocional
+                              : "",
+                          })
+                        }
+                      />
+                      <label htmlFor="em-oferta-check">
+                        🏷️ Produto em oferta
+                      </label>
+                    </div>
+                  </div>
+
+                  {formData.emOferta && (
+                    <div className={Styles.formGroup} style={{ marginTop: "10px" }}>
+                      <label>
+                        Preço promocional (R$) *{" "}
+                        <span style={{ fontSize: "0.78rem", color: "#6B7280", fontWeight: 400 }}>
+                          deve ser menor que R$ {parseFloat(formData.preco || 0).toFixed(2)}
+                        </span>
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        value={formData.precoPromocional}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            precoPromocional: e.target.value,
+                          })
+                        }
+                        placeholder="0.00"
+                        style={{
+                          borderColor:
+                            formData.precoPromocional &&
+                            parseFloat(formData.precoPromocional) >=
+                              parseFloat(formData.preco || 0)
+                              ? "#EF4444"
+                              : undefined,
+                        }}
+                      />
+                      {formData.precoPromocional &&
+                        parseFloat(formData.precoPromocional) >=
+                          parseFloat(formData.preco || 0) && (
+                          <span
+                            style={{
+                              display: "block",
+                              marginTop: "4px",
+                              fontSize: "0.8rem",
+                              color: "#EF4444",
+                            }}
+                          >
+                            ❌ Preço promocional deve ser menor que o preço regular.
+                          </span>
+                        )}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -983,6 +1097,75 @@ const CardapioManager = () => {
                       .reduce((acc, curr) => acc + Number(curr.preco), 0)
                       .toFixed(2)}
                   </div>
+
+                  {/* ── Oferta do Kit ── */}
+                  <div className={Styles.formGroup} style={{ marginTop: "16px" }}>
+                    <div className={Styles.checkboxGroup}>
+                      <input
+                        type="checkbox"
+                        id="kit-em-oferta-check"
+                        checked={formData.emOferta}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            emOferta: e.target.checked,
+                            precoPromocional: e.target.checked
+                              ? formData.precoPromocional
+                              : "",
+                          })
+                        }
+                      />
+                      <label htmlFor="kit-em-oferta-check">
+                        🏷️ Kit em oferta
+                      </label>
+                    </div>
+                  </div>
+
+                  {formData.emOferta && (
+                    <div className={Styles.formGroup} style={{ marginTop: "10px" }}>
+                      <label>
+                        Preço promocional (R$) *{" "}
+                        <span style={{ fontSize: "0.78rem", color: "#6B7280", fontWeight: 400 }}>
+                          deve ser menor que R$ {parseFloat(formData.preco || 0).toFixed(2)}
+                        </span>
+                      </label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        value={formData.precoPromocional}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            precoPromocional: e.target.value,
+                          })
+                        }
+                        placeholder="0.00"
+                        style={{
+                          borderColor:
+                            formData.precoPromocional &&
+                            parseFloat(formData.precoPromocional) >=
+                              parseFloat(formData.preco || 0)
+                              ? "#EF4444"
+                              : undefined,
+                        }}
+                      />
+                      {formData.precoPromocional &&
+                        parseFloat(formData.precoPromocional) >=
+                          parseFloat(formData.preco || 0) && (
+                          <span
+                            style={{
+                              display: "block",
+                              marginTop: "4px",
+                              fontSize: "0.8rem",
+                              color: "#EF4444",
+                            }}
+                          >
+                            ❌ Preço promocional deve ser menor que o preço regular do kit.
+                          </span>
+                        )}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

@@ -9,30 +9,31 @@ import Styles from '../Components/OfferItem.module.css'; // Importa o CSS Module
  * @param {function} props.onClick - Função de callback ao clicar na oferta
  */
 function OfferItem({ offer, onClick }) {
-    // Função para formatar o preço para BRL
     const formatPrice = (price) => {
         return price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     };
 
     return (
-        // O elemento principal utiliza a classe do CSS Module
         <div
             className={Styles.offer_item}
-            onClick={() => onClick(offer)} // Chama a função onClick passando o objeto offer
-            role="button" // Melhora a acessibilidade
-            tabIndex={0} // Permite focar o elemento
+            onClick={() => onClick(offer)}
+            role="button"
+            tabIndex={0}
         >
             {/* Imagem do Produto */}
             <div className={Styles.image_container}>
-                {/* A propriedade 'offer.imageUrl' já deve conter a URL correta
-            (resolvida pelo IMAGE_MAP no HomePage.jsx)
-            */}
                 <img
                     src={offer.imageUrl}
                     alt={offer.name}
                     className={Styles.offer_image}
-                    // Fallback visual se a imagem não carregar
-                    onError={(e) => { e.target.src = '/images/default_placeholder.png'; } } />
+                    onError={(e) => { e.target.src = '/images/default_placeholder.png'; }}
+                />
+                {/* Badge de desconto — exibido apenas quando há originalPrice */}
+                {offer.discount > 0 && (
+                    <span className={Styles.discount_badge}>
+                        🔥 {offer.discount}% OFF
+                    </span>
+                )}
             </div>
 
             {/* Detalhes do Produto */}
@@ -40,20 +41,20 @@ function OfferItem({ offer, onClick }) {
                 <h4 className={Styles.offer_name}>{offer.name}</h4>
                 <p className={Styles.store_name}>{offer.store}</p>
                 <div className={Styles.price_info}>
+                    {/* Preço promocional em destaque */}
                     <span className={Styles.current_price}>
                         {formatPrice(offer.price)}
                     </span>
-                    {/* Exemplo de preço anterior/desconto (opcional) */}
-                    {offer.oldPrice && (
+                    {/* Preço original com strikethrough — usa oldPrice (legado) ou originalPrice */}
+                    {(offer.originalPrice || offer.oldPrice) && (
                         <span className={Styles.old_price}>
-                            {formatPrice(offer.oldPrice)}
+                            {formatPrice(offer.originalPrice || offer.oldPrice)}
                         </span>
                     )}
                 </div>
             </div>
         </div>
     );
-
 }
 
 export default OfferItem;

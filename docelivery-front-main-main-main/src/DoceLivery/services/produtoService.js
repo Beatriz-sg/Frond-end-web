@@ -62,7 +62,10 @@ class ProdutoService {
       preco: dados.preco,
       estoque: dados.estoque || 0,
       categoriaId: parseInt(dados.categoriaId),
-      disponivel: dados.disponivel !== undefined ? dados.disponivel : true
+      disponivel: dados.disponivel !== undefined ? dados.disponivel : true,
+      // Campos promocionais — enviados apenas quando o produto está em oferta
+      emOferta: dados.emOferta === true,
+      precoPromocional: dados.emOferta === true ? (dados.precoPromocional || null) : null
     };
 
     formData.append(
@@ -110,7 +113,10 @@ class ProdutoService {
       preco: typeof dados.preco === 'string' ? parseFloat(dados.preco) : dados.preco,
       estoque: typeof dados.estoque === 'string' ? parseInt(dados.estoque) || 0 : dados.estoque,
       categoriaId: dados.categoriaId ? parseInt(dados.categoriaId) : null,
-      disponivel: dados.disponivel !== undefined ? dados.disponivel : true
+      disponivel: dados.disponivel !== undefined ? dados.disponivel : true,
+      // Campos promocionais — enviados apenas quando o produto está em oferta
+      emOferta: dados.emOferta === true,
+      precoPromocional: dados.emOferta === true ? (dados.precoPromocional || null) : null
     };
 
     formData.append(
