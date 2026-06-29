@@ -3,16 +3,27 @@ import React from 'react';
 const PedidoCard = ({ pedido, onAtualizarStatus }) => {
     if (!pedido) return null;
 
-    const { id, status, cliente, valorPedido, itens, numeroPedido, agendado, dataEntregaAgendada } = pedido;
+    const {
+        id,
+        status,
+        tipoEntrega,
+        cliente,
+        valorPedido,
+        itens,
+        numeroPedido,
+        agendado,
+        dataEntregaAgendada
+    } = pedido;
 
     const statusChave = status ? status.toUpperCase() : 'NOVO';
 
-    // Alinhado com StatusPedido enum: NOVO, PREPARANDO, SAIU_PARA_ENTREGA,
-    // ENTREGUE, CANCELADO, AGENDADO, CONCLUIDO
+    // Alinhado com StatusPedido enum: NOVO, PREPARANDO, PRONTO_PARA_RETIRADA,
+    // SAIU_PARA_ENTREGA, ENTREGUE, CANCELADO, AGENDADO, CONCLUIDO
     const statusColors = {
         NOVO: '#007bff',
         AGENDADO: '#17a2b8',
         PREPARANDO: '#ffc107',
+        PRONTO_PARA_RETIRADA: '#20c997',
         SAIU_PARA_ENTREGA: '#6f42c1',
         ENTREGUE: '#28a745',
         CONCLUIDO: '#28a745',
@@ -23,6 +34,7 @@ const PedidoCard = ({ pedido, onAtualizarStatus }) => {
         NOVO: 'Novo Pedido',
         AGENDADO: 'Agendado',
         PREPARANDO: 'Em Preparação',
+        PRONTO_PARA_RETIRADA: 'Pronto para Retirada',
         SAIU_PARA_ENTREGA: 'Saiu para Entrega',
         ENTREGUE: 'Entregue',
         CONCLUIDO: 'Concluído',
@@ -50,13 +62,44 @@ const PedidoCard = ({ pedido, onAtualizarStatus }) => {
                     </>
                 );
             case 'PREPARANDO':
-                // Envia diretamente para SAIU_PARA_ENTREGA — disponibiliza ao entregador no app mobile
+
+                // Pedido para retirada
+                if (tipoEntrega === 'RETIRADA') {
+                    return (
+                        <button
+                            onClick={() => onAtualizarStatus(id, 'PRONTO_PARA_RETIRADA')}
+                            style={{
+                                padding: '8px 12px',
+                                backgroundColor: '#17a2b8',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                width: '100%',
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            📦 Pronto para Retirada
+                        </button>
+                    );
+                }
+
+                // Pedido para entrega
                 return (
                     <button
                         onClick={() => onAtualizarStatus(id, 'SAIU_PARA_ENTREGA')}
-                        style={{ padding: '8px 12px', backgroundColor: '#6f42c1', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', width: '100%', fontWeight: 'bold' }}
+                        style={{
+                            padding: '8px 12px',
+                            backgroundColor: '#6f42c1',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            width: '100%',
+                            fontWeight: 'bold'
+                        }}
                     >
-                        Pronto para Entrega 🛵
+                        🛵 Enviar para Entrega
                     </button>
                 );
             default:
@@ -89,6 +132,10 @@ const PedidoCard = ({ pedido, onAtualizarStatus }) => {
 
             <div style={{ fontSize: '14px', color: '#555' }}>
                 <p style={{ margin: '5px 0' }}><strong>Cliente:</strong> {cliente?.nome || 'Cliente não identificado'}</p>
+
+                <p>
+                    <strong>Tipo:</strong> {tipoEntrega === 'RETIRADA' ? '🏪 Retirada na Loja' : '🛵 Entrega'}
+                </p>
 
                 {agendado && dataEntregaAgendada && (
                     <p style={{ margin: '5px 0', color: '#d63384' }}>
