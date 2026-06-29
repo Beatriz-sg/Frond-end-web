@@ -1,30 +1,32 @@
 import React from 'react';
 
 const PedidoCard = ({ pedido, onAtualizarStatus }) => {
-    // Evita quebra caso o componente seja renderizado sem dados por milissegundos
     if (!pedido) return null;
 
     const { id, status, cliente, valorPedido, itens, numeroPedido, agendado, dataEntregaAgendada } = pedido;
 
-    // Garantindo que o status seja avaliado sempre em letras maiúsculas
     const statusChave = status ? status.toUpperCase() : 'NOVO';
 
-    // 1. CORRIGIDO: Alinhado perfeitamente com os Enums do seu Java (StatusPedido)
+    // Alinhado com StatusPedido enum: NOVO, PREPARANDO, SAIU_PARA_ENTREGA,
+    // ENTREGUE, CANCELADO, AGENDADO, CONCLUIDO
     const statusColors = {
-        NOVO: '#007bff',          // Azul
-        PREPARANDO: '#ffc107',    // Amarelo
-        PRONTO: '#28a745',        // Verde
-        AGENDADO: '#17a2b8',      // Ciano
-        CANCELADO: '#dc3545',     // Vermelho
+        NOVO: '#007bff',
+        AGENDADO: '#17a2b8',
+        PREPARANDO: '#ffc107',
+        SAIU_PARA_ENTREGA: '#6f42c1',
+        ENTREGUE: '#28a745',
+        CONCLUIDO: '#28a745',
+        CANCELADO: '#dc3545',
     };
 
-    // 2. CORRIGIDO: Nomes amigáveis alinhados aos novos status
     const statusTexto = {
         NOVO: 'Novo Pedido',
-        PREPARANDO: 'Em Preparação',
-        PRONTO: 'Pronto para Retirada',
         AGENDADO: 'Agendado',
-        CANCELADO: 'Cancelado'
+        PREPARANDO: 'Em Preparação',
+        SAIU_PARA_ENTREGA: 'Saiu para Entrega',
+        ENTREGUE: 'Entregue',
+        CONCLUIDO: 'Concluído',
+        CANCELADO: 'Cancelado',
     };
 
     const getAcoes = () => {
@@ -48,12 +50,13 @@ const PedidoCard = ({ pedido, onAtualizarStatus }) => {
                     </>
                 );
             case 'PREPARANDO':
+                // Envia diretamente para SAIU_PARA_ENTREGA — disponibiliza ao entregador no app mobile
                 return (
                     <button
-                        onClick={() => onAtualizarStatus(id, 'PRONTO')}
-                        style={{ padding: '8px 12px', backgroundColor: '#ff69b4', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', width: '100%', fontWeight: 'bold' }}
+                        onClick={() => onAtualizarStatus(id, 'SAIU_PARA_ENTREGA')}
+                        style={{ padding: '8px 12px', backgroundColor: '#6f42c1', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', width: '100%', fontWeight: 'bold' }}
                     >
-                        Marcar como Pronto 🎂
+                        Pronto para Entrega 🛵
                     </button>
                 );
             default:
@@ -86,8 +89,7 @@ const PedidoCard = ({ pedido, onAtualizarStatus }) => {
 
             <div style={{ fontSize: '14px', color: '#555' }}>
                 <p style={{ margin: '5px 0' }}><strong>Cliente:</strong> {cliente?.nome || 'Cliente não identificado'}</p>
-                
-                {/* Exibe a data se for um pedido agendado */}
+
                 {agendado && dataEntregaAgendada && (
                     <p style={{ margin: '5px 0', color: '#d63384' }}>
                         <strong>Entrega:</strong> {new Date(dataEntregaAgendada).toLocaleString('pt-BR')}
@@ -99,7 +101,7 @@ const PedidoCard = ({ pedido, onAtualizarStatus }) => {
                     <ul style={{ paddingLeft: '20px', margin: '5px 0' }}>
                         {itens?.map((item, index) => (
                             <li key={index}>
-                                {item.quantidade}x {item.produto?.nome || 'Doce'}
+                                {item.quantidade}x {item.nomeProduto || item.produto?.nome || 'Doce'}
                             </li>
                         ))}
                     </ul>
@@ -107,7 +109,7 @@ const PedidoCard = ({ pedido, onAtualizarStatus }) => {
             </div>
 
             <h3 style={{ margin: '15px 0', color: '#ff69b4', textAlign: 'right' }}>
-                Total: R$ {valorPedido?.toFixed(2) || '0.00'}
+                Total: R$ {Number(valorPedido ?? 0).toFixed(2)}
             </h3>
 
             <div style={{ borderTop: '1px solid #eee', paddingTop: '12px', display: 'flex', justifyContent: 'center' }}>

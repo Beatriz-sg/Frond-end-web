@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import OrderService from '../services/orderService';
-import ApiService from '../services/api';
 import AuthService from '../services/authService';
 import PedidoCard from './PedidoCard';
 import Styles from './PedidosPage.module.css';
-
-// Importação das bibliotecas de WebSocket
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import { API_WS_URL } from '../config/api.config';
 
 const PedidosPage = () => {
     const [pedidos, setPedidos] = useState([]);
@@ -35,7 +33,7 @@ const PedidosPage = () => {
         if (!confeiteiroId) return;
 
         // Abre conexão com o endpoint do seu WebSocketConfig Java
-        const socket = new SockJS('http://localhost:8080/ws-docelivery');
+        const socket = new SockJS(API_WS_URL);
         const stompClient = Stomp.over(socket);
 
         // Desativa os logs repetitivos do Stomp no console (opcional, deixa o console mais limpo)
@@ -88,7 +86,8 @@ const PedidosPage = () => {
 
     const atualizarStatusPedido = async (pedidoId, novoStatus) => {
         try {
-            await ApiService.patch(`/pedidos/${pedidoId}`, { status: novoStatus });
+            // Usa OrderService.atualizarStatus — chama PATCH /pedidos/{id}/status?novoStatus=X
+            await OrderService.atualizarStatus(pedidoId, novoStatus);
             carregarPedidos();
         } catch (error) {
             console.error("Erro ao atualizar status do pedido:", error);

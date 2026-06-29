@@ -25,9 +25,10 @@ class OrderService {
   }
 
   async atualizarStatus(pedidoId, novoStatus) {
-    return await ApiService.patch(API_ENDPOINTS.ORDERS.STATUS(pedidoId), null, {
-      params: { novoStatus: novoStatus.toUpperCase() }
-    });
+    // PATCH /api/pedidos/{id}/status?novoStatus=X — alinhado com PedidoController
+    return await ApiService.patch(
+      `${API_ENDPOINTS.ORDERS.STATUS(pedidoId)}?novoStatus=${novoStatus.toUpperCase()}`
+    );
   }
 
   async getTodosPedidos(confeiteiroId) {
