@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Styles from './Formulario.module.css';
 import logoImage from '../assests/img/doce_Livre_3.jpg';
 import { API_BASE_URL } from '../config/api.config';
+import { isValidCpf } from '../utils/cpf';
 
 const STEPS = ['Dados Pessoais', 'Confeitaria', 'Acesso'];
 
@@ -11,6 +12,7 @@ const CadastroConfeiteiro = () => {
     const [step, setStep] = useState(0);
     const [cepLoading, setCepLoading] = useState(false);
     const [cepErro, setCepErro] = useState('');
+    const [cpfErro, setCpfErro] = useState('');
     const [erro, setErro] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -48,6 +50,15 @@ const CadastroConfeiteiro = () => {
         const { name, value } = e.target;
         const masked = ['cpf', 'cnpj', 'telefone'].includes(name) ? applyMask(name, value) : value;
         setFormData(prev => ({ ...prev, [name]: masked }));
+
+        if (name === 'cpf') {
+            const digits = masked.replace(/\D/g, '');
+            if (digits.length === 11) {
+                setCpfErro(isValidCpf(masked) ? '' : 'CPF inválido.');
+            } else {
+                setCpfErro('');
+            }
+        }
     };
 
     const handleCepChange = async (e) => {
@@ -80,7 +91,14 @@ const CadastroConfeiteiro = () => {
         }
     };
 
-    const nextStep = (e) => { e.preventDefault(); setStep(s => s + 1); };
+    const nextStep = (e) => {
+        e.preventDefault();
+        if (step === 0 && !isValidCpf(formData.cpf)) {
+            setCpfErro('CPF inválido.');
+            return;
+        }
+        setStep(s => s + 1);
+    };
     const prevStep = () => setStep(s => s - 1);
 
     const handleSubmit = async (e) => {
@@ -129,7 +147,8 @@ const CadastroConfeiteiro = () => {
             const data = await response.json().catch(() => null);
 
             if (!response.ok) {
-                setErro(typeof data === 'string' ? data : 'Erro ao cadastrar. Tente novamente.');
+                const apiMsg = data?.error || data?.message || (typeof data === 'string' ? data : null);
+                setErro(apiMsg || 'Erro ao cadastrar. Tente novamente.');
                 return;
             }
 
@@ -178,6 +197,7 @@ const CadastroConfeiteiro = () => {
                                 <div className={Styles.form_group}>
                                     <label>CPF</label>
                                     <input type="text" name="cpf" value={formData.cpf} onChange={handleChange} placeholder="000.000.000-00" maxLength={14} required />
+                                    {cpfErro && <small style={{ color: 'red' }}>{cpfErro}</small>}
                                 </div>
                                 <div className={Styles.form_group}>
                                     <label>Data de Nascimento</label>

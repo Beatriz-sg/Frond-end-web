@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Styles from './Formulario.module.css';
 import logoImage from '../assests/img/doce_Livre_3.jpg';
 import authService from '../services/authService';
+import { isValidCpf } from '../utils/cpf';
 
 const STEPS = ['Dados Pessoais', 'Endereço', 'Acesso'];
 
@@ -11,6 +12,7 @@ const CadastroCliente = () => {
     const [step, setStep] = useState(0);
     const [cepLoading, setCepLoading] = useState(false);
     const [cepErro, setCepErro] = useState('');
+    const [cpfErro, setCpfErro] = useState('');
     const [erro, setErro] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -52,6 +54,16 @@ const CadastroCliente = () => {
         const { name, value } = e.target;
         const masked = ['cpf', 'telefone'].includes(name) ? applyMask(name, value) : value;
         setFormData(prev => ({ ...prev, [name]: masked }));
+
+        // Real-time CPF validation — triggers as soon as 11 digits are entered
+        if (name === 'cpf') {
+            const digits = masked.replace(/\D/g, '');
+            if (digits.length === 11) {
+                setCpfErro(isValidCpf(masked) ? '' : 'CPF inválido.');
+            } else {
+                setCpfErro('');
+            }
+        }
     };
 
     const handleCepChange = async (e) => {
@@ -86,6 +98,11 @@ const CadastroCliente = () => {
 
     const nextStep = (e) => {
         e.preventDefault();
+        // Block step 0 → 1 if CPF is invalid
+        if (step === 0 && !isValidCpf(formData.cpf)) {
+            setCpfErro('CPF inválido.');
+            return;
+        }
         setStep(s => s + 1);
     };
 
@@ -125,7 +142,11 @@ const CadastroCliente = () => {
             navigate('/docelivery/cliente/login-cliente');
         } catch (error) {
             console.error("Erro na API:", error);
-            setErro('Erro ao cadastrar. Verifique se o CPF ou Email já existem.');
+            // Surface the exact message returned by the API (HTTP 400/409)
+            const apiMsg = error?.response?.data?.error
+                || error?.response?.data?.message
+                || error?.response?.data;
+            setErro(typeof apiMsg === 'string' ? apiMsg : 'Erro ao cadastrar. Verifique se o CPF ou Email já existem.');
         } finally {
             setLoading(false);
         }
@@ -169,6 +190,7 @@ const CadastroCliente = () => {
                                 <div className={Styles.form_group}>
                                     <label>CPF</label>
                                     <input type="text" name="cpf" value={formData.cpf} onChange={handleChange} placeholder="000.000.000-00" maxLength={14} required />
+                                    {cpfErro && <small style={{ color: 'red' }}>{cpfErro}</small>}
                                 </div>
                                 <div className={Styles.form_group}>
                                     <label>Data de Nascimento</label>
