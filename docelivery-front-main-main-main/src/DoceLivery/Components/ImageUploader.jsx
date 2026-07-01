@@ -34,7 +34,7 @@ const ImageUploader = ({ onImageSelect, currentImage }) => {
     const handleDrop = (e) => {
         e.preventDefault();
         setDragOver(false);
-        
+
         const files = e.dataTransfer.files;
         if (files.length > 0) {
             handleFileSelect(files[0]);
@@ -68,10 +68,11 @@ const ImageUploader = ({ onImageSelect, currentImage }) => {
 
     return (
         <div className={Styles.imageUploader}>
-            {preview ? (
+            {preview && (
                 <div className={Styles.imagePreview}>
                     <img src={preview} alt="Preview" />
-                    <button 
+
+                    <button
                         className={Styles.removeBtn}
                         onClick={clearImage}
                         type="button"
@@ -79,23 +80,29 @@ const ImageUploader = ({ onImageSelect, currentImage }) => {
                         <IoClose size={20} />
                     </button>
                 </div>
-            ) : (
-                <div 
-                    className={`${Styles.dropZone} ${dragOver ? Styles.dragOver : ''}`}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
-                >
-                    <IoCloudUpload size={48} />
-                    <p>Arraste uma imagem aqui ou clique para selecionar</p>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileInput}
-                        className={Styles.fileInput}
-                    />
-                </div>
             )}
+
+            <div
+                className={`${Styles.dropZone} ${dragOver ? Styles.dragOver : ""}`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+            >
+                <IoCloudUpload size={48} />
+
+                <p>
+                    {preview
+                        ? "Clique ou arraste outra imagem para substituir"
+                        : "Arraste uma imagem aqui ou clique para selecionar"}
+                </p>
+
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileInput}
+                    className={Styles.fileInput}
+                />
+            </div>
         </div>
     );
 };
